@@ -6,10 +6,13 @@ import (
 	"github/godsr/smart_receive/gin/start/models"
 
 	"github.com/gin-gonic/gin"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func UserController(c *gin.Context) {
 	c.String(200, "Hello World!")
+	log.Info("UserController pass")
 	fmt.Println("Hello World!!!!!!")
 }
 

@@ -7,9 +7,13 @@ import (
 )
 
 func CarRoute(router *gin.Engine) {
-	router.GET("/", controller.UserController)
-	router.GET("/test", controller.Getting)
-	router.POST("/test", controller.Posting)
-	router.DELETE("/test/:id", controller.Delete)
-	router.PUT("/test/:id", controller.Update)
+
+	apiRouter := router.Group("/api")
+
+	apiRouter.GET("/", controller.UserController)
+	apiRouter.GET("/test", controller.Getting)
+	apiRouter.POST("/test", controller.Posting)
+	apiRouter.DELETE("/test/:id", controller.Delete)
+	apiRouter.PUT("/test/:id", controller.Update)
+
 }
