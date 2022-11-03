@@ -7,6 +7,7 @@ import (
 	"github/godsr/smart_receive/gin/start/routes"
 	"github/godsr/smart_receive/gin/start/util"
 	"os"
+	"text/template"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -46,7 +47,11 @@ func main() {
 	go util.LoadEnv(ctx)
 	router := gin.New()
 	router.Use(ginlogrus.Logger(log.New()), gin.Recovery())
-	routes.CarRoute(router)
+	router.SetFuncMap(template.FuncMap{})
+	router.LoadHTMLGlob("templates/*.html")
+	router.Static("/static", "./static")
+	routes.ApiRouter(router)
+	routes.DemoRouter(router)
 	config.Connect()
 	router.Run(":8080")
 }
