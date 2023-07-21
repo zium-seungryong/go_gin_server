@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github/godsr/smart_receive/gin/start/models"
+	"github/godsr/smart_receive/gin/start/util"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,10 +10,11 @@ import (
 var DB *gorm.DB
 
 func Connect() {
-	db, err := gorm.Open(postgres.Open("postgres://RINO:rinoadmin@show.ziumks.com:35432/RINO_SMARTCON"), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(util.Conf("RINO")), &gorm.Config{})
+
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&models.Car{})
+	// db.AutoMigrate(&models.Car{})
 	DB = db
 }

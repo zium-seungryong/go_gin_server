@@ -1,46 +1,39 @@
 package controller
 
 import (
-	"fmt"
 	"github/godsr/smart_receive/gin/start/config"
 	"github/godsr/smart_receive/gin/start/models"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
-
-	log "github.com/sirupsen/logrus"
 )
 
-func UserController(c *gin.Context) {
-	c.String(200, "Hello World!")
-	log.Info("UserController pass")
-	fmt.Println("Hello World!!!!!!")
+// 현재 발생 중인 상황 이벤트
+func StatEvetOutbList(c *gin.Context) {
+	statEveOutbtHist := []models.StatEvetOutbHist{} //Table 구조체
+
+	var procSt = "5" // 상황 발생 1, 상황 진행중 3, 상황 종료 5
+
+	result := config.DB.Where("proc_st != ?", procSt).Find(&statEveOutbtHist)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+		return
+	}
+	// JSON으로 결과 값 반환
+	c.JSON(http.StatusOK, &statEveOutbtHist)
 }
 
-func Getting(c *gin.Context) {
-	cars := []models.Car{}
-	c.BindJSON(&cars)
-	config.DB.Find(&cars)
-	c.JSON(200, &cars)
-}
+// 등록된 상황 이벤트
+func StatEvetInfoList(c *gin.Context) {
+	StatEvetInfo := []models.StatEvetInfo{} //Table 구조체
 
-func Posting(c *gin.Context) {
-	var car models.Car
-	c.BindJSON(&car)
-	config.DB.Create(&car)
-	c.JSON(200, &car)
-}
+	result := config.DB.Find(&StatEvetInfo)
 
-func Delete(c *gin.Context) {
-	var car models.Car
-	c.BindJSON(&car)
-	config.DB.Where("id = ?", c.Param("id")).Delete(&car)
-	c.JSON(200, &car)
-}
-
-func Update(c *gin.Context) {
-	var car models.Car
-	config.DB.Where("id = ?", c.Param("id")).First(&car)
-	c.BindJSON(&car)
-	config.DB.Save(&car)
-	c.JSON(200, &car)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+		return
+	}
+	// JSON으로 결과 값 반환
+	c.JSON(http.StatusOK, &StatEvetInfo)
 }

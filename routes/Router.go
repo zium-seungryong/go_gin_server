@@ -7,26 +7,46 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Api 라우팅
 func ApiRouter(router *gin.Engine) {
 
 	apiRouter := router.Group("/api")
 
-	apiRouter.GET("/", controller.UserController)
-	apiRouter.GET("/test", controller.Getting)
-	apiRouter.POST("/test", controller.Posting)
-	apiRouter.DELETE("/test/:id", controller.Delete)
-	apiRouter.PUT("/test/:id", controller.Update)
+	apiRouter.GET("/statEvetOutbList", controller.StatEvetOutbList)
+	apiRouter.GET("/statEvetInfoList", controller.StatEvetInfoList)
 
 }
 
-func DemoRouter(router *gin.Engine) {
+// html 페이지 라우팅
+func HtmlRouter(router *gin.Engine) {
 
-	demoRouter := router.Group("/demo")
+	pageRouter := router.Group("/page")
 
-	demoRouter.GET("/1", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "index.html", gin.H{
-			"title":   "뱃살마왕.",
-			"message": "그 이름은, 박 민 수 !",
+	pageRouter.GET("/checkList", func(context *gin.Context) {
+		context.HTML(http.StatusOK, "checkList.html", gin.H{
+			"title":   "체크리스트",
+			"message": "체크리스트",
+		})
+	})
+
+	pageRouter.GET("/statEvetList", func(context *gin.Context) {
+		context.HTML(http.StatusOK, "statEvetList.html", gin.H{
+			"title":   "상황 이벤트 리스트",
+			"message": "상황 이벤트",
+		})
+	})
+
+	pageRouter.GET("/evetHist", func(context *gin.Context) {
+		context.HTML(http.StatusOK, "evetHist.html", gin.H{
+			"title":   "이벤트 발생 내역",
+			"message": "전체 이벤트",
+		})
+	})
+
+	pageRouter.GET("/checkListInsert", func(context *gin.Context) {
+		context.HTML(http.StatusOK, "checkListInsert.html", gin.H{
+			"title":   "체크리스트 등록",
+			"message": "체크리스트 등록",
 		})
 	})
 }
