@@ -1,0 +1,199 @@
+<!-- 전체 이벤트 목록 -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공군15비행단</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="/static/css/basic.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+
+  <body>
+    <div class="wrap w100per">
+      <!-- Header -->
+      <header class="header-area w100per" id="header-area"></header>
+      <!-- Header End -->
+      <main class="container">
+        <section class="top-area">
+          <div class="con">
+            <div class="top-search-box flex aic">
+              <span class="title">발생 시각</span>
+              <span class="flex aic">
+                <input
+                  type="date"
+                  class="ic-date w200"
+                  placeholder="YYYY-MM-DD"
+                  id="startDate"
+                />
+                <span class="mr12 ml12 cfff">~</span>
+                <input
+                  type="date"
+                  class="w200"
+                  placeholder="YYYY-MM-DD"
+                  id="endDate"
+                />
+              </span>
+              <input
+                type="text"
+                class="ml12 mr12 ic-date w200"
+                placeholder="조치자"
+                id="reportName"
+              />
+              <button class="btn btn-type-2 solid-public" id="searchBtn">
+                검색
+              </button>
+            </div>
+          </div>
+        </section>
+        <section class="con">
+          <div class="title-box">
+            <span class="flex aic">
+              <img
+                src="/static/images/ico-txt-title-1.svg"
+                class="mr8"
+                alt="타이틀아이콘"
+              />
+              <h2>이벤트 발생 내역</h2>
+            </span>
+          </div>
+          <div class="inbox-area inbox-bg table-wrap">
+            <div class="table-box set-h-event">
+              <table class="tb-type-1 separate" id="eventTable">
+                <colgroup>
+                  <col width="30%" />
+                  <col width="20%" />
+                  <col width="15%" />
+                  <col width="15%" />
+                  <col width="20%" />
+                </colgroup>
+                <thead>
+                  <tr class="hover-none">
+                    <th>이벤트명</th>
+                    <th>조치자</th>
+                    <th>발생시각</th>
+                    <th>조치시각</th>
+                    <th>경과</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <tr>
+                    <td>테스트 이벤트</td>
+                    <td>홍길동</td>
+                    <td>2023-00-00 00:00:00</td>
+                    <td>2023-00-00 00:00:00</td>
+                    <td>
+                      <span class="process-stiker str-1">진행완료</span>
+                    </td>
+                  </tr> -->
+                </tbody>
+              </table>
+              <div class="pagenation pagenation-box x-middle">
+                <ul class="flex fww" id="pagination-list">
+                  <li><a class="double-prev"></a></li>
+                  <li><a class="prev"></a></li>
+                  <li><a class="num active">1</a></li>
+                  <li><a class="num">2</a></li>
+                  <li><a class="num">3</a></li>
+                  <li><a class="next"></a></li>
+                  <li><a class="double-next"></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <!-- container END -->
+
+      <!-- 모달 영역 -->
+      <div class="modal-area wh100per fixed zi4">
+        <div class="event-rgdt modal-box-in modal-box fdc abs xy-middle bfff">
+          <div class="top-box flex jcsb">
+            <button class="x-btn img-box abs">
+              <img src="/static/images/ic-close.svg" alt="닫기 아이콘" />
+            </button>
+            <span class="modal-title tb"> 이벤트 발생 내역 </span>
+          </div>
+          <div class="modal-cont-box">
+            <div class="table-wrap">
+              <div class="table-box">
+                <table class="tb-type-modal modal-input-text">
+                  <colgroup>
+                    <col width="30%" />
+                    <col width="*" />
+                  </colgroup>
+                  <tbody>
+                    <tr>
+                      <th>발생 시각</th>
+                      <td id="evet_outb_time" style="color: black"></td>
+                    </tr>
+                    <tr>
+                      <th>내용</th>
+                      <td id="evet_cntn" style="color: black"></td>
+                    </tr>
+                    <tr>
+                      <th>상황 단계</th>
+                      <td id="proc_st" style="color: black"></td>
+                    </tr>
+                    <tr>
+                      <th>진행 단계</th>
+                      <td id style="color: black">
+                        <table id="detail_cntn">
+                          <thead>
+                            <tr>
+                              <th>대응단계</th>
+                              <th>상세대응</th>
+                              <th>대응여부</th>
+                              <th>대응시각</th>
+                            </tr>
+                          </thead>
+                          <tbody></tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>보고자</th>
+                      <td id="reporter_nm" style="color: black"></td>
+                    </tr>
+                    <tr>
+                      <th>조치시각</th>
+                      <td id="reporter_dtm" style="color: black"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- wrap END -->
+
+    <!-- 제이쿼리 -->
+    <script src="/static/js/jquery-3.6.1.min.js"></script>
+    <script src="/static/js/apiManager.js"></script>
+    <script src="/static/js/p-03.js"></script>
+    <script src="/static/js/dateFormat.js"></script>
+    <script src="/static/js/page.js"></script>
+    <script src="/static/js/custom.js"></script>
+    <!-- include script -->
+    <script>
+      // 헤더 html 불러오는 함수
+      document.addEventListener("DOMContentLoaded", function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/page/header", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("header-area").innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send();
+      });
+
+      tableData(1); //1page
+    </script>
+  </body>
+</html>

@@ -48,7 +48,7 @@ func main() {
 	router := gin.New()
 	router.Use(ginlogrus.Logger(log.New()), gin.Recovery())
 	router.SetFuncMap(template.FuncMap{})
-	router.LoadHTMLGlob("templates/*.html")
+	router.LoadHTMLGlob("templates/sub/*.html")
 	router.Static("/static", "./static")
 	routes.ApiRouter(router)
 	routes.HtmlRouter(router)

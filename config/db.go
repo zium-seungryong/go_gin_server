@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github/godsr/smart_receive/gin/start/models"
 	"github/godsr/smart_receive/gin/start/util"
 
 	"gorm.io/driver/postgres"
@@ -15,6 +16,8 @@ func Connect() {
 	if err != nil {
 		panic(err)
 	}
-	// db.AutoMigrate(&models.Car{})
+	db.AutoMigrate(&models.EvetReact{})
+	db.AutoMigrate(&models.EvetReporterHist{})
+	db.AutoMigrate(&models.ReactDetail{})
 	DB = db
 }

@@ -1,0 +1,362 @@
+<!-- 체크리스트 등록 -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공군15비행단</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="/static/css/basic.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+
+  <body>
+    <div class="wrap w100per">
+      <!--  등록 모달  -->
+      <div class="modal-area wh100per fixed zi4">
+        <div class="event-rgdt modal-box-in modal-box fdc abs xy-middle bfff">
+          <div class="top-box flex jcsb">
+            <button class="x-btn img-box abs">
+              <img src="/static/images/ic-close.svg" alt="닫기 아이콘" />
+            </button>
+            <span class="modal-title tb"> 상황구분 등록 </span>
+          </div>
+          <div class="modal-cont-box">
+            <div class="table-wrap">
+              <div class="table-box">
+                <table class="tb-type-modal modal-input-text">
+                  <colgroup>
+                    <col width="30%" />
+                    <col width="*" />
+                  </colgroup>
+                  <tbody>
+                    <tr>
+                      <th>상황구분코드</th>
+                      <td>
+                        <input
+                          type="text"
+                          class="tb-edit"
+                          value=""
+                          class=""
+                          placeholder="코드입력"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>대응 단계 코드</th>
+                      <td>
+                        <input
+                          type="text"
+                          class="tb-edit"
+                          value=""
+                          class=""
+                          placeholder="코드입력"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>상황구분명</th>
+                      <td>
+                        <input
+                          type="text"
+                          class="tb-edit"
+                          value=""
+                          class=""
+                          placeholder="상황구분명 입력"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>상황구분설명</th>
+                      <td>
+                        <input
+                          type="text"
+                          class="tb-edit"
+                          value=""
+                          class=""
+                          placeholder="상황구분설명 입력"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>대응 단계 내용</th>
+                      <td>
+                        <input
+                          type="text"
+                          class="tb-edit"
+                          value=""
+                          class=""
+                          placeholder="대응단계 내용입력"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-btn-wrap flex jcc">
+            <a class="btn btn-type-1 line-gray mr8 w50per tac">취소</a>
+            <a class="btn btn-type-1 solid-public w50per cfff tac">저장</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <header class="header-area w100per" id="header-area"></header>
+      <!-- Header End -->
+      <main class="container">
+        <section class="top-area">
+          <div class="con">
+            <div class="top-search-box flex aic">
+              <span class="title">검색조건</span>
+              <span class="flex aic">
+                <input
+                  type="date"
+                  class="ic-date w200"
+                  placeholder="YYYY-MM-DD"
+                />
+                <span class="mr12 ml12 cfff">~</span>
+                <input
+                  type="date"
+                  class="ic-date w200"
+                  placeholder="YYYY-MM-DD"
+                />
+              </span>
+              <select class="w200 mr12 ml12">
+                <option selected>옵션 선택</option>
+                <option>123</option>
+                <option>123</option>
+              </select>
+              <select class="w200">
+                <option selected>옵션 선택</option>
+                <option>123</option>
+                <option>123</option>
+              </select>
+            </div>
+          </div>
+        </section>
+        <section class="con">
+          <div class="title-box flex aic jcsb">
+            <span class="flex">
+              <img
+                src="/static/images/ico-txt-title-1.svg"
+                class="mr8"
+                alt="타이틀아이콘"
+              />
+              <h2>상황대응기준 등록내역</h2>
+            </span>
+            <div class="btn-wrap flex aic">
+              <button class="modal-event-rgdt btn btn-type-1 line-gray mr8">
+                수정
+              </button>
+              <button class="modal-event-rgdt btn btn-type-1 solid-public">
+                등록
+              </button>
+            </div>
+          </div>
+          <div class="inbox-area inbox-bg table-wrap">
+            <div class="table-box set-h-event">
+              <table class="tb-type-1 separate">
+                <colgroup>
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                </colgroup>
+                <thead>
+                  <tr class="hover-none">
+                    <th>
+                      <div class="check-box">
+                        <input type="checkbox" class="check-type" />
+                      </div>
+                    </th>
+                    <th>상황 구분 코드</th>
+                    <th>대응 단계 코드</th>
+                    <th>상황 구분 명</th>
+                    <th>대응 단계 명</th>
+                    <th>대응 단계 내용</th>
+                    <th>등록 일시</th>
+                    <th>수정 일시</th>
+                    <th>상세</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="check-box">
+                        <input type="checkbox" class="check-type" />
+                      </div>
+                    </td>
+                    <td>E011</td>
+                    <td>A001</td>
+                    <td>기지방어</td>
+                    <td>상황인식</td>
+                    <td>상황 대응화면으로 전환하시겠습니까?</td>
+                    <td>2023-12-12 03:12:22</td>
+                    <td>2023-12-12 03:12:22</td>
+                    <td>
+                      <span class="ic-down"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="check-box">
+                        <input type="checkbox" class="check-type" />
+                      </div>
+                    </td>
+                    <td>E011</td>
+                    <td>A001</td>
+                    <td>기지방어</td>
+                    <td>상황인식</td>
+                    <td>전환하시겠습니까?</td>
+                    <td>2023-12-12 03:12:22</td>
+                    <td>2023-12-12 03:12:22</td>
+                    <td>
+                      <span class="ic-up"></span>
+                    </td>
+                  </tr>
+                  <tr class="tb-detail">
+                    <td colspan="9">
+                      <div class="tb-boxin-area">
+                        <div class="flex aic jcsb">
+                          <p class="cgr300 f14">상세</p>
+                          <span class="btn-wrap flex">
+                            <button class="tb-btn type-1 mr8">
+                              + 대응 단계 추가
+                            </button>
+                            <button class="tb-btn type-2">삭제</button>
+                          </span>
+                        </div>
+                        <table class="tb-boxin separate mt12 tb-input-text">
+                          <colgroup>
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                          </colgroup>
+                          <thead>
+                            <tr class="hover-none">
+                              <th>
+                                <div class="check-box">
+                                  <input type="checkbox" class="check-type" />
+                                </div>
+                              </th>
+                              <th>상세대응 코드</th>
+                              <th>표현순서</th>
+                              <th>상세 대응 단계 명</th>
+                              <th>상세 대응 단계 내용</th>
+                              <th>수정 일시</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <!-- 대응단계 추가버튼 클릭시 tr add -->
+                            <tr>
+                              <td>
+                                <div class="check-box">
+                                  <input type="checkbox" class="check-type" />
+                                </div>
+                              </td>
+                              <td>A001</td>
+                              <td>기지방어</td>
+                              <td class="pr4">
+                                <input
+                                  type="text"
+                                  class="tb-edit"
+                                  value="상황인식"
+                                  class=""
+                                  placeholder="내용입력"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  class="tb-edit"
+                                  value="상황 대응화면으로 전환하시겠습니까?"
+                                  class=""
+                                  placeholder="내용입력"
+                                />
+                              </td>
+                              <td>2023-12-12 03:12:22</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="check-box">
+                                  <input type="checkbox" class="check-type" />
+                                </div>
+                              </td>
+                              <td>A001</td>
+                              <td>기지방어</td>
+                              <td class="pr4">
+                                <input
+                                  type="text"
+                                  class="tb-edit"
+                                  value=""
+                                  class=""
+                                  placeholder="내용입력"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  class="tb-edit"
+                                  value=""
+                                  class=""
+                                  placeholder="내용입력"
+                                />
+                              </td>
+                              <td>2023-12-12 03:12:22</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagenation pagenation-box x-middle">
+              <ul class="flex fww">
+                <li><a class="double-prev"></a></li>
+                <li><a class="prev"></a></li>
+                <li><a class="num active">1</a></li>
+                <li><a class="num">2</a></li>
+                <li><a class="num">3</a></li>
+                <li><a class="next"></a></li>
+                <li><a class="double-next"></a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+      <!-- container END -->
+    </div>
+    <!-- wrap END -->
+
+    <!-- 제이쿼리 -->
+    <script src="/static/js/jquery-3.6.1.min.js"></script>
+    <script src="/static/js/custom.js"></script>
+
+    <!-- include script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/page/header", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("header-area").innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!-- 상황 이벤트 목록 -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>공군15비행단</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="/static/css/basic.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+
+  <body>
+    <div class="wrap w100per">
+      <!-- Header -->
+      <header class="header-area w100per" id="header-area"></header>
+      <!-- Header End -->
+      <main class="container">
+        <section class="top-area">
+          <div class="con">
+            <div class="top-search-box flex aic">
+              <span class="title">검색조건</span>
+              <span class="flex aic">
+                <input
+                  type="date"
+                  class="ic-date w200"
+                  placeholder="YYYY-MM-DD"
+                />
+                <span class="mr12 ml12 cfff">~</span>
+                <input
+                  type="date"
+                  class="ic-daet w200"
+                  placeholder="YYYY-MM-DD"
+                />
+              </span>
+              <input type="text" class="ml12 mr12 w200" />
+              <button class="btn btn-type-2 solid-public">검색</button>
+            </div>
+          </div>
+        </section>
+        <section class="con">
+          <div class="title-box flex jcsb aic">
+            <span class="flex">
+              <img
+                src="/static/images/ico-txt-title-1.svg"
+                class="mr8"
+                alt="타이틀아이콘"
+              />
+              <h2>타이틀영역</h2>
+            </span>
+            <button class="btn btn-type-1 solid-gray">이벤트 종료</button>
+          </div>
+          <div class="inbox-area inbox-bg table-wrap">
+            <div class="table-box set-h">
+              <table class="tb-type-1 separate">
+                <colgroup>
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>title</th>
+                    <th>title</th>
+                    <th>title</th>
+                    <th>title</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>text</td>
+                    <td>text</td>
+                    <td>text</td>
+                    <td>text</td>
+                  </tr>
+                  <tr>
+                    <td>text</td>
+                    <td>text</td>
+                    <td>text</td>
+                    <td>text</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+      <!-- container END -->
+    </div>
+    <!-- wrap END -->
+
+    <!-- 제이쿼리 -->
+    <script src="/static/js/jquery-3.6.1.min.js"></script>
+    <!-- include script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/page/header", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("header-area").innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send();
+      });
+    </script>
+  </body>
+</html>

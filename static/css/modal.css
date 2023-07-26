@@ -1,0 +1,115 @@
+/* modal setting */
+.modal-area {
+  background: rgba(0,0,0,0.6);
+  display: none;
+  top: 0;
+  left: 0;
+}
+.modal-area.active {
+  display: block;
+}
+.modal-area .modal-box {
+  display: none;
+}
+.modal-area .modal-box.active {
+  display: flex;
+}
+.modal-area .modal-box .x-btn {
+  width: 24px;
+  top: 36px;
+  right: 36px;
+}
+
+.modal-area .modal-title {
+  font-size: 2.4rem;
+  /* margin-left: 24px; */
+}
+
+/* modal design - 1*/
+.modal-area .modal-box-in {
+  min-width: 400px;
+  background: #fff;
+  padding:40px;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.modal-area .modal-box-in .top-box {
+  height: 40px;
+  /* background: #f2f3ff; */
+}
+.modal-area .modal-box-in .top-box .logo-box {
+  width: 140px;
+}
+.modal-area .modal-box-in .modal-cont-box {
+  font-size: 1.5rem;
+}
+
+.modal-area .modal-box-in .modal-btn-wrap {
+  margin-top:40px;
+}
+
+/* modal design - 2*/
+.modal-area .modal-box-in-2 .x-btn {
+  width: 24px;
+  top: 20px;
+  right: 24px;
+}
+.modal-area .modal-box-in-2 .modal-btn-wrap {
+  margin:40px;
+}
+.modal-area .modal-box-in-2 {
+  min-width: 400px;
+  background: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+.modal-area .modal-box-in-2 .top-box {
+  padding:20px 0;
+  background: #f2f4f8;
+  border-radius: 8px 8px 0 0;
+}
+.modal-area .modal-box-in-2 .top-box .logo-box {
+  width: 140px;
+}
+.modal-area .modal-box-in-2 .cont-box {
+  padding: 40px;
+  font-size: 1.5rem;
+
+}
+.modal-area .modal-box-in-2 .cont-box.set-modal-w{
+  min-width: 600px;
+  max-width: 800px;
+}
+
+
+/*modal table */
+.tb-type-modal tr:first-child{
+  border-top:2px solid #3577F8;
+}  
+.tb-type-modal tr {
+  min-height: 44px;
+  border-bottom:1px solid #eee;
+  box-sizing: border-box;
+}
+.tb-type-modal th {
+  text-align: center;
+  min-width: 160px;
+  background: #f2f4f8;
+}
+.tb-type-modal td {
+  padding: 4px 16px;
+  min-width: 300px;
+  line-height: 1.6;
+}
+
+/*모달 택스트 입력 인풋 */
+.modal-input-text td input.tb-edit {
+  width: 100%;
+  background: transparent;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size:1.3rem;
+  white-space: nowrap;
+  padding:12px;
+}
