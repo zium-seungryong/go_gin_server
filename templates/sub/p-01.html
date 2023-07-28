@@ -21,22 +21,31 @@
         <section class="top-area">
           <div class="con">
             <div class="top-search-box flex aic">
-              <span class="title">검색조건</span>
+              <span class="title">발생시각</span>
               <span class="flex aic">
                 <input
                   type="date"
                   class="ic-date w200"
                   placeholder="YYYY-MM-DD"
+                  id="startDate"
                 />
                 <span class="mr12 ml12 cfff">~</span>
                 <input
                   type="date"
                   class="ic-daet w200"
                   placeholder="YYYY-MM-DD"
+                  id="endDate"
                 />
               </span>
-              <input type="text" class="ml12 mr12 w200" />
-              <button class="btn btn-type-2 solid-public">검색</button>
+              <input
+                type="text"
+                class="ml12 mr12 w200"
+                placeholder="이벤트명"
+                id="evetName"
+              />
+              <button class="btn btn-type-2 solid-public" id="searchBtn">
+                검색
+              </button>
             </div>
           </div>
         </section>
@@ -48,13 +57,15 @@
                 class="mr8"
                 alt="타이틀아이콘"
               />
-              <h2>타이틀영역</h2>
+              <h2>상황 이벤트</h2>
             </span>
-            <button class="btn btn-type-1 solid-gray">이벤트 종료</button>
+            <button class="btn btn-type-1 solid-gray" id="endBtn">
+              이벤트 종료
+            </button>
           </div>
           <div class="inbox-area inbox-bg table-wrap">
             <div class="table-box set-h">
-              <table class="tb-type-1 separate">
+              <table class="tb-type-1 separate" id="eventTable">
                 <colgroup>
                   <col width="" />
                   <col width="" />
@@ -63,25 +74,33 @@
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>title</th>
-                    <th>title</th>
-                    <th>title</th>
-                    <th>title</th>
+                    <th>
+                      <div class="check-box">
+                        <input
+                          type="checkbox"
+                          class="check-type"
+                          id="all_check"
+                        />
+                      </div>
+                    </th>
+                    <th>이벤트명</th>
+                    <th>내용</th>
+                    <th>발생시각</th>
+                    <th>경과</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <!-- <tr>
+                    <td>
+                      <div class="check-box">
+                        <input type="checkbox" class="check-type" />
+                      </div>
+                    </td>
                     <td>text</td>
                     <td>text</td>
                     <td>text</td>
                     <td>text</td>
-                  </tr>
-                  <tr>
-                    <td>text</td>
-                    <td>text</td>
-                    <td>text</td>
-                    <td>text</td>
-                  </tr>
+                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -94,6 +113,10 @@
 
     <!-- 제이쿼리 -->
     <script src="/static/js/jquery-3.6.1.min.js"></script>
+    <script src="/static/js/apiManager.js"></script>
+    <script src="/static/js/p-01.js"></script>
+    <script src="/static/js/dateFormat.js"></script>
+    <script src="/static/js/checkBox.js"></script>
     <!-- include script -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -106,6 +129,9 @@
         };
         xhr.send();
       });
+
+      tableData();
+      AllCheck("all_check", ".check-type");
     </script>
   </body>
 </html>

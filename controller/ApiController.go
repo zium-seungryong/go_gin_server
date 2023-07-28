@@ -46,16 +46,55 @@ type StatEvetInfo2 struct {
 	ReporterDtm string               `json:"reporterDtm"`
 }
 
+type StatEvetOutbHistList struct {
+	StatEvetOutbSeqn string
+	OutbDtm          string
+	StatEvetNm       string
+	StatEvetCntn     string
+	ProcSt           string
+}
+
 // 현재 발생 중인 상황 이벤트
 func StatEvetOutbList(c *gin.Context) {
-	statEveOutbtHist := []models.StatEvetOutbHist{} //Table 구조체
+	var statEveOutbtHist []StatEvetOutbHistList //Table 구조체
+	startDateStr := c.Query("startDate")
+	endDateStr := c.Query("endDate")
+	evetNmStr := c.Query("evetNm")
+
+	startDate, err := time.Parse("2006-01-02", startDateStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Invalid startDate format. Use YYYY-MM-DD."})
+		return
+	}
+
+	endDate, err := time.Parse("2006-01-02", endDateStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Invalid endDate format. Use YYYY-MM-DD."})
+		return
+	}
 
 	var procSt = "5" // 상황 발생 1, 상황 진행중 3, 상황 종료 5
 
-	result := config.DB.Where("proc_st != ?", procSt).Find(&statEveOutbtHist) //종료된 상황이 아닌 이벤트 목록
+	result := config.DB.Table("ioc.ioc_stat_evet_outb_hist").
+		Select("ioc.ioc_stat_evet_outb_hist.stat_evet_outb_seqn, ioc.ioc_stat_evet_outb_hist.outb_dtm ,ioc.ioc_stat_evet_outb_hist.proc_st, ioc_stat_evet_outb_hist.stat_evet_cntn, isei.stat_evet_nm").
+		Joins("join ioc.ioc_stat_evet_info isei on ioc.ioc_stat_evet_outb_hist.stat_evet_cd = isei.stat_evet_cd and ioc.ioc_stat_evet_outb_hist.svc_theme_cd = isei.svc_theme_cd").
+		Order("ioc.ioc_stat_evet_outb_hist.outb_dtm desc").
+		Where("outb_dtm BETWEEN ? AND ?", startDate, endDate).
+		Where("proc_st != ?", procSt).
+		Find(&statEveOutbtHist) //종료된 상황이 아닌 이벤트 목록
+
+	// 이벤트명이 조건이 있는 경우, 쿼리에 조건 추가
+	if evetNmStr != "" {
+		result = result.Where("isei.stat_evet_nm LIKE ?", "%"+evetNmStr+"%")
+	}
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+		return
+	}
+
+	if err := result.Order("outb_dtm desc").Find(&statEveOutbtHist).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Database query error"})
 		return
 	}
 	// JSON으로 결과 값 반환
@@ -163,7 +202,7 @@ func ReporterHistList(c *gin.Context) {
 
 	// reporter_nm 조건이 있는 경우, 쿼리에 조건 추가
 	if reporterNm != "" {
-		result = result.Where("reporter_nm = ?", reporterNm)
+		result = result.Where("reporter_nm like ?", "%"+reporterNm+"%")
 	}
 
 	// 쿼리 실행하여 결과 가져오기
