@@ -8,9 +8,9 @@ type EvetReact struct {
 	StatEvetCd string `gorm:"column:stat_evet_cd" json:"statEvetCd"` //상황 이벤트 코드
 	StatEvetNm string `gorm:"column:stat_evet_nm" json:"statEvetNm"` //상황 이벤트 명
 	ReactGd    string `gorm:"column:react_gd" json:"reactGd"`        //대응단계
-	ReactGdNum int8   `gorm:"column:react_gd_num" json:"reactGdNum"` //대응단계 표시 순서
+	ReactGdNum int   `gorm:"column:react_gd_num" json:"reactGdNum"` //대응단계 표시 순서
 	Detail     string `gorm:"column:detail" json:"detail"`           //상세대응
-	DetailNum  int8   `gorm:"column:detail_num" json:"detailNum"`    //상세대응 표시순서
+	DetailNum  int   `gorm:"column:detail_num" json:"detailNum"`    //상세대응 표시순서
 }
 
 func (u *EvetReact) TableName() string {

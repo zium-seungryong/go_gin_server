@@ -280,6 +280,8 @@ body {
   background: transparent;
 }
 .tb-boxin-area {
+  display: none;
+  /* display: show; */
   padding: 20px;
   border: 1px solid #373b3e;
   border-radius: 4px;

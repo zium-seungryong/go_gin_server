@@ -4,6 +4,7 @@ import (
 	"github/godsr/smart_receive/gin/start/config"
 	"github/godsr/smart_receive/gin/start/models"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 
@@ -53,6 +54,60 @@ type StatEvetOutbHistList struct {
 	StatEvetCntn     string
 	ProcSt           string
 }
+
+type OriginformedData struct {
+	SiteCd string
+	ClientCd string
+	ZnCd string
+	UnitSvcCd string
+	SvcThemeCd string              
+	StatEvetCd string              
+	StatEvetNm string              
+	ReactGd    string              
+	ReactGdNum int
+	Detail     string
+	DetailNum  int                 
+}
+
+
+// type TransformedData struct {
+// 	SiteCd string
+// 	ClientCd string
+// 	ZnCd string
+// 	UnitSvcCd string
+// 	SvcThemeCd string              `json:"svcThemeCd"`
+// 	StatEvetCd string              `json:"statEvetCd"`
+// 	StatEvetNm string              `json:"statEvetNm"`
+// 	ReactGd    string              `json:"reactGd"`
+// 	ReactGdNum int                 `json:"reactGdNum"`
+// 	DetailList map[string][]Detail `json:"detailList"`
+// }
+
+// type Detail struct {
+// 	Detail    string `json:"detail"`
+// 	DetailNum int    `json:"detailNum"`
+// }
+
+// Detail 구조체 정의
+type Detail struct {
+	Detail     string `json:"detail"`
+	DetailNum  int    `json:"detailNum"`
+}
+
+// TransformedData 구조체, DetailList를 Detail 객체 슬라이스로 변경
+type TransformedData struct {
+	SiteCd     string            `json:"SiteCd"`
+	ClientCd   string            `json:"ClientCd"`
+	ZnCd       string            `json:"ZnCd"`
+	UnitSvcCd  string            `json:"UnitSvcCd"`
+	SvcThemeCd string            `json:"svcThemeCd"`
+	StatEvetCd string            `json:"statEvetCd"`
+	StatEvetNm string            `json:"statEvetNm"`
+	ReactGd    string            `json:"reactGd"`
+	ReactGdNum int               `json:"reactGdNum"`
+	DetailList []Detail          `json:"detailList"`
+}
+
 
 // 현재 발생 중인 상황 이벤트
 func StatEvetOutbList(c *gin.Context) {
@@ -306,4 +361,84 @@ func GetStatEvetHist(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, event)
+}
+// 상황 이벤트 내역 등록 리스트
+func GetstatEvetReactList(c *gin.Context) {
+	var evetReact []OriginformedData
+	svcThemeCdStr := c.Query("svcThemeCd")
+	statEvetCdStr := c.Query("statEvetCd")
+
+	result := config.DB.Table("s_army.evet_react").
+		Select("isei.site_cd, isei.client_cd, isei.zn_cd,isei.unit_svc_cd, s_army.evet_react.svc_theme_cd, s_army.evet_react.stat_evet_cd, isei.stat_evet_nm, s_army.evet_react.react_gd, s_army.evet_react.react_gd_num, s_army.evet_react.detail, s_army.evet_react.detail_num, s_army.evet_react.id ").
+		Joins("join ioc.ioc_stat_evet_info isei on s_army.evet_react.svc_theme_cd = isei.svc_theme_cd and s_army.evet_react.stat_evet_cd = isei.stat_evet_cd").
+		Order("isei.stat_evet_nm, isei.stat_evet_cd, s_army.evet_react.react_gd_num, s_army.evet_react.detail_num").
+		Where(" s_army.evet_react.svc_theme_cd = ? and s_army.evet_react.stat_evet_cd = ?", svcThemeCdStr, statEvetCdStr)
+
+	// 쿼리 실행하여 결과 가져오기
+	if err := result.Find(&evetReact).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Database query error"})
+		return
+	}
+
+	// 모든 데이터를 담을 슬라이스
+	var transformedDataSlice []TransformedData
+
+	for _, data := range evetReact {
+		siteCd := data.SiteCd
+		clientCd := data.ClientCd
+		znCd := data.ZnCd
+		unitSvcCd := data.UnitSvcCd
+		svcThemeCd := data.SvcThemeCd
+		statEvetCd := data.StatEvetCd
+		statEvetNm := data.StatEvetNm
+		reactGd := data.ReactGd
+		reactGdNum := data.ReactGdNum
+
+		// 이미 존재하는지 확인
+		var existingIndex int
+		found := false
+		for i, transformedData := range transformedDataSlice {
+			if transformedData.SiteCd == siteCd &&
+				transformedData.ClientCd == clientCd &&
+				transformedData.ZnCd == znCd &&
+				transformedData.UnitSvcCd == unitSvcCd &&
+				transformedData.SvcThemeCd == svcThemeCd &&
+				transformedData.StatEvetCd == statEvetCd &&
+				transformedData.StatEvetNm == statEvetNm &&
+				transformedData.ReactGd == reactGd {
+				existingIndex = i
+				found = true
+				break
+			}
+		}
+
+		// 이미 존재하는 경우 Detail 추가
+		if found {
+			detailList := transformedDataSlice[existingIndex].DetailList
+			detailList = append(detailList, Detail{DetailNum: data.DetailNum, Detail: data.Detail})
+			transformedDataSlice[existingIndex].DetailList = detailList
+		} else {
+			// 존재하지 않는 경우 새로운 TransformedData 생성
+			transformedData := TransformedData{
+				SiteCd:     siteCd,
+				ClientCd:   clientCd,
+				ZnCd:       znCd,
+				UnitSvcCd:  unitSvcCd,
+				SvcThemeCd: svcThemeCd,
+				StatEvetCd: statEvetCd,
+				StatEvetNm: statEvetNm,
+				ReactGd:    reactGd,
+				ReactGdNum: reactGdNum,
+				DetailList: []Detail{{DetailNum: data.DetailNum, Detail: data.Detail}},
+			}
+			transformedDataSlice = append(transformedDataSlice, transformedData)
+		}
+	}
+
+	// ReactGdNum 순으로 정렬
+	sort.Slice(transformedDataSlice, func(i, j int) bool {
+		return transformedDataSlice[i].ReactGdNum < transformedDataSlice[j].ReactGdNum
+	})
+
+	c.JSON(http.StatusOK, transformedDataSlice)
 }

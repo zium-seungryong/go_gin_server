@@ -17,8 +17,10 @@ func ApiRouter(router *gin.Engine) {
 	apiRouter.GET("/reporterHistList", controller.ReporterHistList)
 	apiRouter.GET("/checkListInfo", controller.CheckListInfo)
 	apiRouter.GET("/getStatEvetHist", controller.GetStatEvetHist)
+	apiRouter.GET("/getstatEvetReactList", controller.GetstatEvetReactList)
 	apiRouter.POST("/reactInsert", controller.ReactInsert)
 	apiRouter.POST("/reporterInsert", controller.ReporterInsert)
+	
 
 }
 
