@@ -20,13 +20,12 @@ function getApi(url, callback) {
 }
 
 // get api2
-function getApi2(url, data, callback) {
+function getApi2(url) {
   fetch(url, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
   })
     .then(function (response) {
       console.log(response);
@@ -34,7 +33,6 @@ function getApi2(url, data, callback) {
     })
     .then(function (data) {
       console.log(data);
-      callback(data);
     })
     .catch(function (error) {
       console.log("ajax error:", error);
@@ -113,4 +111,41 @@ function postApi2(url, data, callback) {
     .catch((error) => {
       console.error("Error:", error);
     });
+}
+
+function postApi3(url, data) {
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((responseData) => {
+      console.log(responseData);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+async function deleteDelete(url) {
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    console.log("User deleted successfully!");
+  } catch (error) {
+    console.error("Error deleting user:", error);
+  }
 }

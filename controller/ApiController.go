@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"fmt"
 	"github/godsr/smart_receive/gin/start/config"
 	"github/godsr/smart_receive/gin/start/models"
 	"net/http"
-	"sort"
 	"strconv"
 	"time"
 
@@ -37,14 +37,14 @@ type StatEvetInfo1 struct {
 }
 
 type StatEvetInfo2 struct {
-	EventSeq    string               `json:"evetSeq"`
-	OutbDtm     string               `json:"outbDtm"`
-	EventNm     string               `json:"evetNm"`
-	ProcSt      string               `json:"procSt"`
-	EventCntn   string               `json:"evetCntn"`
-	DetailCntns []models.ReactDetail `json:"detailCntn"`
-	Reporter    string               `json:"reporter"`
-	ReporterDtm string               `json:"reporterDtm"`
+	EventSeq    string                   `json:"evetSeq"`
+	OutbDtm     string                   `json:"outbDtm"`
+	EventNm     string                   `json:"evetNm"`
+	ProcSt      string                   `json:"procSt"`
+	EventCntn   string                   `json:"evetCntn"`
+	DetailCntns []models.ReactDetailHist `json:"detailCntn"`
+	Reporter    string                   `json:"reporter"`
+	ReporterDtm string                   `json:"reporterDtm"`
 }
 
 type StatEvetOutbHistList struct {
@@ -55,59 +55,66 @@ type StatEvetOutbHistList struct {
 	ProcSt           string
 }
 
-type OriginformedData struct {
-	SiteCd string
-	ClientCd string
-	ZnCd string
-	UnitSvcCd string
-	SvcThemeCd string              
-	StatEvetCd string              
-	StatEvetNm string              
-	ReactGd    string              
-	ReactGdNum int
-	Detail     string
-	DetailNum  int                 
-}
-
-
-// type TransformedData struct {
-// 	SiteCd string
-// 	ClientCd string
-// 	ZnCd string
-// 	UnitSvcCd string
-// 	SvcThemeCd string              `json:"svcThemeCd"`
-// 	StatEvetCd string              `json:"statEvetCd"`
-// 	StatEvetNm string              `json:"statEvetNm"`
-// 	ReactGd    string              `json:"reactGd"`
-// 	ReactGdNum int                 `json:"reactGdNum"`
-// 	DetailList map[string][]Detail `json:"detailList"`
+// type OriginformedData struct {
+// 	SiteCd     string
+// 	ClientCd   string
+// 	ZnCd       string
+// 	UnitSvcCd  string
+// 	SvcThemeCd string
+// 	StatEvetCd string
+// 	StatEvetNm string
+// 	ReactGd    string
+// 	ReactGdNum int
+// 	Detail     string
+// 	DetailNum  int
 // }
 
+// // Detail 구조체 정의
 // type Detail struct {
 // 	Detail    string `json:"detail"`
 // 	DetailNum int    `json:"detailNum"`
 // }
 
-// Detail 구조체 정의
-type Detail struct {
-	Detail     string `json:"detail"`
-	DetailNum  int    `json:"detailNum"`
+// // TransformedData 구조체, DetailList를 Detail 객체 슬라이스로 변경
+// type TransformedData struct {
+// 	SiteCd     string   `json:"SiteCd"`
+// 	ClientCd   string   `json:"ClientCd"`
+// 	ZnCd       string   `json:"ZnCd"`
+// 	UnitSvcCd  string   `json:"UnitSvcCd"`
+// 	SvcThemeCd string   `json:"svcThemeCd"`
+// 	StatEvetCd string   `json:"statEvetCd"`
+// 	StatEvetNm string   `json:"statEvetNm"`
+// 	ReactGd    string   `json:"reactGd"`
+// 	ReactGdNum int      `json:"reactGdNum"`
+// 	DetailList []Detail `json:"detailList"`
+// }
+
+type OriginformedData struct {
+	ID         uint
+	SiteCd     string
+	ClientCd   string
+	ZnCd       string
+	UnitSvcCd  string
+	SvcThemeCd string
+	StatEvetCd string
+	StatEvetNm string
+	ReactGd    string
+	ReactGdNum int
 }
 
-// TransformedData 구조체, DetailList를 Detail 객체 슬라이스로 변경
 type TransformedData struct {
-	SiteCd     string            `json:"SiteCd"`
-	ClientCd   string            `json:"ClientCd"`
-	ZnCd       string            `json:"ZnCd"`
-	UnitSvcCd  string            `json:"UnitSvcCd"`
-	SvcThemeCd string            `json:"svcThemeCd"`
-	StatEvetCd string            `json:"statEvetCd"`
-	StatEvetNm string            `json:"statEvetNm"`
-	ReactGd    string            `json:"reactGd"`
-	ReactGdNum int               `json:"reactGdNum"`
-	DetailList []Detail          `json:"detailList"`
+	ID         uint
+	SiteCd     string               `json:"SiteCd"`
+	ClientCd   string               `json:"ClientCd"`
+	ZnCd       string               `json:"ZnCd"`
+	UnitSvcCd  string               `json:"UnitSvcCd"`
+	SvcThemeCd string               `json:"svcThemeCd"`
+	StatEvetCd string               `json:"statEvetCd"`
+	StatEvetNm string               `json:"statEvetNm"`
+	ReactGd    string               `json:"reactGd"`
+	ReactGdNum int                  `json:"reactGdNum"`
+	DetailList []models.ReactDetail `json:"detailList"`
 }
-
 
 // 현재 발생 중인 상황 이벤트
 func StatEvetOutbList(c *gin.Context) {
@@ -170,7 +177,7 @@ func StatEvetInfoList(c *gin.Context) {
 	c.JSON(http.StatusOK, &StatEvetInfo)
 }
 
-// 체크리스트 대응 단계/상세 대응 등록
+// 체크리스트 대응 단계
 func ReactInsert(c *gin.Context) {
 	var evetReact models.EvetReact
 
@@ -188,6 +195,26 @@ func ReactInsert(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, evetReact)
+}
+
+// 상세대응 저장
+func DetailInsert(c *gin.Context) {
+	var reactDetail models.ReactDetail
+
+	// JSON 데이터를 파싱하여 구조체에 바인딩
+	if err := c.BindJSON(&reactDetail); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
+		return
+	}
+
+	// 데이터베이스에 새로운 대응 단계 정보 저장
+	result := config.DB.Save(&reactDetail)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save data"})
+		return
+	}
+
+	c.JSON(http.StatusOK, reactDetail)
 }
 
 // 체크리스트 대응 내역 기록
@@ -336,13 +363,13 @@ func GetStatEvetHist(c *gin.Context) {
 		return
 	}
 
-	reactDetail := []models.ReactDetail{}
+	reactDetailHist := []models.ReactDetailHist{}
 
 	result2 := config.DB.
 		Where("evet_seq = ?", evetSeq).
 		Order("detail").
 		Order("check_time").
-		Find(&reactDetail)
+		Find(&reactDetailHist)
 
 	if result2.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"db error": result2.Error.Error()})
@@ -357,88 +384,114 @@ func GetStatEvetHist(c *gin.Context) {
 		EventCntn:   statEvetInfo1.StatEvetCntn,
 		Reporter:    statEvetInfo1.ReporterNm,
 		ReporterDtm: statEvetInfo1.ReportDtm,
-		DetailCntns: reactDetail,
+		DetailCntns: reactDetailHist,
 	}
 
 	c.JSON(http.StatusOK, event)
 }
-// 상황 이벤트 내역 등록 리스트
+
 func GetstatEvetReactList(c *gin.Context) {
-	var evetReact []OriginformedData
+	var oriData []OriginformedData
 	svcThemeCdStr := c.Query("svcThemeCd")
 	statEvetCdStr := c.Query("statEvetCd")
 
 	result := config.DB.Table("s_army.evet_react").
-		Select("isei.site_cd, isei.client_cd, isei.zn_cd,isei.unit_svc_cd, s_army.evet_react.svc_theme_cd, s_army.evet_react.stat_evet_cd, isei.stat_evet_nm, s_army.evet_react.react_gd, s_army.evet_react.react_gd_num, s_army.evet_react.detail, s_army.evet_react.detail_num, s_army.evet_react.id ").
+		Select("isei.site_cd, isei.client_cd, isei.zn_cd,isei.unit_svc_cd, s_army.evet_react.svc_theme_cd, s_army.evet_react.stat_evet_cd, isei.stat_evet_nm, s_army.evet_react.react_gd, s_army.evet_react.react_gd_num, s_army.evet_react.id ").
 		Joins("join ioc.ioc_stat_evet_info isei on s_army.evet_react.svc_theme_cd = isei.svc_theme_cd and s_army.evet_react.stat_evet_cd = isei.stat_evet_cd").
-		Order("isei.stat_evet_nm, isei.stat_evet_cd, s_army.evet_react.react_gd_num, s_army.evet_react.detail_num").
+		Order("isei.stat_evet_nm, isei.stat_evet_cd, s_army.evet_react.react_gd_num").
+		Where("s_army.evet_react.deleted_at is NULL").
 		Where(" s_army.evet_react.svc_theme_cd = ? and s_army.evet_react.stat_evet_cd = ?", svcThemeCdStr, statEvetCdStr)
 
 	// 쿼리 실행하여 결과 가져오기
-	if err := result.Find(&evetReact).Error; err != nil {
+	if err := result.Find(&oriData).Error; err != nil {
 		c.JSON(500, gin.H{"error": "Database query error"})
 		return
 	}
 
-	// 모든 데이터를 담을 슬라이스
-	var transformedDataSlice []TransformedData
+	// reactDetail := []models.ReactDetail{}
 
-	for _, data := range evetReact {
-		siteCd := data.SiteCd
-		clientCd := data.ClientCd
-		znCd := data.ZnCd
-		unitSvcCd := data.UnitSvcCd
-		svcThemeCd := data.SvcThemeCd
-		statEvetCd := data.StatEvetCd
-		statEvetNm := data.StatEvetNm
-		reactGd := data.ReactGd
-		reactGdNum := data.ReactGdNum
+	event := []TransformedData{}
 
-		// 이미 존재하는지 확인
-		var existingIndex int
-		found := false
-		for i, transformedData := range transformedDataSlice {
-			if transformedData.SiteCd == siteCd &&
-				transformedData.ClientCd == clientCd &&
-				transformedData.ZnCd == znCd &&
-				transformedData.UnitSvcCd == unitSvcCd &&
-				transformedData.SvcThemeCd == svcThemeCd &&
-				transformedData.StatEvetCd == statEvetCd &&
-				transformedData.StatEvetNm == statEvetNm &&
-				transformedData.ReactGd == reactGd {
-				existingIndex = i
-				found = true
-				break
-			}
+	for i := 0; i < len(oriData); i++ {
+
+		reactDetail := []models.ReactDetail{}
+		result2 := config.DB.
+			Where("svc_theme_cd = ?", svcThemeCdStr).
+			Where("stat_evet_cd = ?", statEvetCdStr).
+			Where("react_gd = ?", oriData[i].ReactGd).
+			Order("id").
+			Find(&reactDetail)
+
+		if result2.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"db error": result2.Error.Error()})
+			return
 		}
 
-		// 이미 존재하는 경우 Detail 추가
-		if found {
-			detailList := transformedDataSlice[existingIndex].DetailList
-			detailList = append(detailList, Detail{DetailNum: data.DetailNum, Detail: data.Detail})
-			transformedDataSlice[existingIndex].DetailList = detailList
-		} else {
-			// 존재하지 않는 경우 새로운 TransformedData 생성
-			transformedData := TransformedData{
-				SiteCd:     siteCd,
-				ClientCd:   clientCd,
-				ZnCd:       znCd,
-				UnitSvcCd:  unitSvcCd,
-				SvcThemeCd: svcThemeCd,
-				StatEvetCd: statEvetCd,
-				StatEvetNm: statEvetNm,
-				ReactGd:    reactGd,
-				ReactGdNum: reactGdNum,
-				DetailList: []Detail{{DetailNum: data.DetailNum, Detail: data.Detail}},
-			}
-			transformedDataSlice = append(transformedDataSlice, transformedData)
+		transformedData := TransformedData{
+			ID:         oriData[i].ID,
+			SiteCd:     oriData[i].SiteCd,
+			ClientCd:   oriData[i].ClientCd,
+			ZnCd:       oriData[i].ZnCd,
+			UnitSvcCd:  oriData[i].UnitSvcCd,
+			SvcThemeCd: oriData[i].SvcThemeCd,
+			StatEvetCd: oriData[i].StatEvetCd,
+			StatEvetNm: oriData[i].StatEvetNm,
+			ReactGd:    oriData[i].ReactGd,
+			ReactGdNum: oriData[i].ReactGdNum,
+			DetailList: reactDetail,
 		}
+		event = append(event, transformedData)
 	}
 
-	// ReactGdNum 순으로 정렬
-	sort.Slice(transformedDataSlice, func(i, j int) bool {
-		return transformedDataSlice[i].ReactGdNum < transformedDataSlice[j].ReactGdNum
-	})
+	c.JSON(http.StatusOK, event)
+}
 
-	c.JSON(http.StatusOK, transformedDataSlice)
+// 상세 대응 삭제
+func DeleteDetail(c *gin.Context) {
+	var reactDetail models.ReactDetail
+	result := config.DB.Where("id = ?", c.Param("id")).Delete(&reactDetail)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(200, &reactDetail)
+}
+
+// 대응 단계 삭제
+func DeleteReact(c *gin.Context) {
+	var evetReact models.EvetReact
+	result := config.DB.Where("svc_theme_cd = ?", c.Param("svcThemeCd")).
+		Where("stat_evet_cd = ?", c.Param("statEvetCd")).
+		Where("react_gd = ?", c.Param("reactGd")).
+		Where("react_gd_num = ?", c.Param("reactGdNum")).
+		Delete(&evetReact)
+
+	fmt.Println(c.Param("svcThemeCd"))
+	fmt.Println(c.Param("statEvetCd"))
+	fmt.Println(c.Param("reactGd"))
+	fmt.Println(c.Param("reactGdNum"))
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+		return
+	}
+	c.JSON(200, &evetReact)
+}
+
+// 대응 단계 삭제 전 상세 대응 메뉴가 있는 지 확인
+func GetDeleteDetailListCheck(c *gin.Context) {
+	var reactDetail []models.ReactDetail
+	result := config.DB.Where("svc_theme_cd = ?", c.Param("svcThemeCd")).
+		Where("stat_evet_cd = ?", c.Param("statEvetCd")).
+		Where("react_gd = ?", c.Param("reactGd")).
+		Find(&reactDetail)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(200, &reactDetail)
 }

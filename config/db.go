@@ -19,5 +19,6 @@ func Connect() {
 	db.AutoMigrate(&models.EvetReact{})
 	db.AutoMigrate(&models.EvetReporterHist{})
 	db.AutoMigrate(&models.ReactDetail{})
+	db.AutoMigrate(&models.ReactDetailHist{})
 	DB = db
 }

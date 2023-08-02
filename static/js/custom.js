@@ -23,7 +23,7 @@ $(document).ready(function () {
     $(".modal-area, .modal-box").removeClass("active");
     $("body").removeClass("active");
   });
-
+  // modal open
   $(".container .modal-event-rgdt").click(function () {
     $(".modal-area, .event-rgdt").toggleClass("active");
     $("body").addClass("active");
