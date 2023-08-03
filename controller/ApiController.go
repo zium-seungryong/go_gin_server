@@ -334,7 +334,6 @@ func CheckListInfo(c *gin.Context) {
 		// Model(&models.EvetReact{}).
 		Where("svc_theme_cd = ? and stat_evet_cd = ?", statEveOutbtHist.SvcThemeCd, statEveOutbtHist.StatEvetCd).
 		Order("react_gd_num").
-		Order("detail_num").
 		Find(&evetReact)
 
 	if result2.Error != nil {
@@ -342,7 +341,36 @@ func CheckListInfo(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, evetReact)
+	event := []TransformedData{}
+
+	for i := 0; i < len(evetReact); i++ {
+
+		reactDetail := []models.ReactDetail{}
+		result3 := config.DB.
+			Where("svc_theme_cd = ?", evetReact[i].SvcThemeCd).
+			Where("stat_evet_cd = ?", evetReact[i].StatEvetCd).
+			Where("react_gd = ?", evetReact[i].ReactGd).
+			Order("id").
+			Find(&reactDetail)
+
+		if result3.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"db error": result3.Error.Error()})
+			return
+		}
+
+		transformedData := TransformedData{
+			ID:         evetReact[i].ID,
+			SvcThemeCd: evetReact[i].SvcThemeCd,
+			StatEvetCd: evetReact[i].StatEvetCd,
+			StatEvetNm: evetReact[i].StatEvetNm,
+			ReactGd:    evetReact[i].ReactGd,
+			ReactGdNum: evetReact[i].ReactGdNum,
+			DetailList: reactDetail,
+		}
+		event = append(event, transformedData)
+	}
+
+	c.JSON(http.StatusOK, event)
 
 }
 

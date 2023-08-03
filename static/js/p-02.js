@@ -60,15 +60,14 @@ function listTable(jsonData) {
   const table = document.getElementById("statTable");
   const tbody = table.getElementsByTagName("tbody")[0];
 
+  tbody.innerHTML = "";
   if (jsonData.length == 0) {
     console.log("json data 없음");
-    tbody.innerHTML = "";
     return;
   }
 
   const arrayData = jsonData;
 
-  tbody.innerHTML = "";
   let v = 0;
   for (let i = 0; i < arrayData.length; i++) {
     let row = tbody.insertRow(v);

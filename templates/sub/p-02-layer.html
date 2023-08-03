@@ -175,18 +175,18 @@
                 <div class="event-text-1 flex aic jcsb">
                   <span class="layer-title-box flex aic">
                     <span class="layer-stiker str-1">소방재난</span>
-                    <span class="layer-title">이벤트제목</span>
+                    <span class="layer-title" id="evetTitle">이벤트제목</span>
                   </span>
                   <button class="btn btn-type-1 solid-gray2">
                     상황조치 완료
                   </button>
                 </div>
                 <div class="event-text-2 flex">
-                  <span class="mr20">2023-12-12 10:00:10</span>
+                  <span class="mr20" id="evetDtm">2023-12-12 10:00:10</span>
                   <soan>이벤트 발생위치 표시 영역</soan>
                 </div>
                 <div class="tab-menu-area">
-                  <ul class="tab-menu-box flex jcs">
+                  <ul class="tab-menu-box flex jcs" id="tabArea">
                     <li>
                       <a href="#tab1-1" class="active">상황발생 체크리스트</a>
                     </li>
@@ -252,6 +252,9 @@
     <!-- 제이쿼리 -->
     <script src="/static/js/jquery-3.6.1.min.js"></script>
     <script src="/static/js/custom.js"></script>
+    <script src="/static/js/apiManager.js"></script>
+    <script src="/static/js/dateFormat.js"></script>
+    <script src="/static/js/p-02-layer.js"></script>
 
     <!-- include script -->
     <script>
