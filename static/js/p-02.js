@@ -50,6 +50,8 @@ document.getElementById("searchBtn").addEventListener("click", function () {
   console.log("선택된 옵션 내용:", selectedOptionContent);
   console.log("선택된 옵션 ID:", selectedOptionId);
   console.log();
+
+  tableData();
 });
 
 // 테이블
@@ -60,6 +62,7 @@ function listTable(jsonData) {
 
   if (jsonData.length == 0) {
     console.log("json data 없음");
+    tbody.innerHTML = "";
     return;
   }
 
@@ -69,7 +72,7 @@ function listTable(jsonData) {
   let v = 0;
   for (let i = 0; i < arrayData.length; i++) {
     let row = tbody.insertRow(v);
-    row.className = "tabeRow";
+    row.className = "tabelRow";
     row.id = arrayData[i].ID;
     const checkBoxCell = row.insertCell(0); //체크 박스
     const evetIdCell = row.insertCell(1); //이벤트 ID
@@ -365,10 +368,12 @@ document.getElementById("saveBtn").addEventListener("click", function () {
   const modalEvetId = document.getElementById("modalEvetId");
   const modalReact = document.getElementById("modalReact");
   const modalReactNum = document.getElementById("modalReactNum");
+  const modalTableRow = document.getElementById("tableRowId");
 
   const modalEvetIdVal = modalEvetId.value;
   const modalReactVal = modalReact.value;
   const modalReactNumVal = modalReactNum.value;
+  const modalTableRowVal = modalTableRow.value;
 
   if (modalEvetIdVal == null || modalEvetIdVal == "") {
     alert("이벤트 아이디를  입력하여 주세요");
@@ -405,12 +410,24 @@ document.getElementById("saveBtn").addEventListener("click", function () {
     return;
   }
 
-  const data = {
-    svcThemeCd: svcThemeCd,
-    statEvetCd: statEvetCd.toString(),
-    reactGd: modalReactVal,
-    reactGdNum: Number(modalReactNumVal),
-  };
+  let data = "";
+
+  if (modalTableRowVal == "" || modalTableRowVal == null) {
+    data = {
+      svcThemeCd: svcThemeCd,
+      statEvetCd: statEvetCd.toString(),
+      reactGd: modalReactVal,
+      reactGdNum: Number(modalReactNumVal),
+    };
+  } else {
+    data = {
+      ID: Number(modalTableRowVal),
+      svcThemeCd: svcThemeCd,
+      statEvetCd: statEvetCd.toString(),
+      reactGd: modalReactVal,
+      reactGdNum: Number(modalReactNumVal),
+    };
+  }
 
   console.log(data);
 
@@ -418,6 +435,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
   modalEvetId.value = "";
   modalReact.value = "";
   modalReactNum.value = "";
+  modalTableRow.value = "";
 
   postApi(saveUrl, data, saveSuccescc);
   // 모달 닫기
@@ -425,29 +443,29 @@ document.getElementById("saveBtn").addEventListener("click", function () {
   $("body").removeClass("active");
 });
 
-// // 삭제 버튼
+// 삭제 버튼 클릭 시
 document.getElementById("deleteBtn").addEventListener("click", function () {
-  const trElements = document.querySelectorAll("tr.tabeRow");
-  let otherTdValues = [];
+  const trElements = document.querySelectorAll("tr.tabelRow");
 
   trElements.forEach((trElement) => {
     const checkBoxElement = trElement.querySelector("input.check-type");
 
     if (checkBoxElement.checked) {
-      // <tr> 태그 내의 모든 <td> 태그들을 선택합니다.
       const tdElements = trElement.querySelectorAll("td");
 
-      // 체크된 <tr>의 다른 <td> 태그들의 값을 배열에 저장합니다.
       const tdValues = [];
+
       tdElements.forEach((tdElement, index) => {
         if (index !== 0) {
-          // 첫 번째 <td>는 체크박스를 포함하므로 건너뜁니다.
           tdValues.push(tdElement.textContent);
         }
       });
 
-      // 각 <tr>에 대한 다른 <td> 값들을 배열에 추가합니다.
-      otherTdValues.push(tdValues);
+      // if (tdValues.length == 0) {
+      //   alert("상세 대응을 선택하여 주세요");
+      //   return;
+      // }
+
       console.log(tdValues);
 
       const svcThemeCd = tdValues[0].substring(11, 14);
@@ -503,9 +521,15 @@ document.getElementById("deleteBtn").addEventListener("click", function () {
 
 // //수정 버튼 클릭 시
 document.getElementById("updateBtn").addEventListener("click", function () {
-  const trElements = document.querySelectorAll("tr.tabeRow");
+  const trElements = document.querySelectorAll("tr.tabelRow");
 
   const otherTdValues = [];
+  let trId = getCheckedRowIds();
+
+  if (trId == null || trId == "") {
+    alert("상세 대응을 선택하여 주세요");
+    return;
+  }
 
   trElements.forEach((trElement) => {
     // 해당 <tr>에 있는 체크박스를 가져옵니다.
@@ -537,9 +561,28 @@ document.getElementById("updateBtn").addEventListener("click", function () {
     modalReactNum.value = otherTdValues[3] || "-";
     modalEvetId.readOnly = true;
 
+    const modalTable = document.getElementById("tableRowId");
+    modalTable.value = trId;
+
+    console.log(modalTable.value);
+
     $(".modal-area, .event-rgdt").toggleClass("active");
     $("body").addClass("active");
   }
+});
+
+// 등록 버튼 클릭 시
+document.getElementById("insertBtn").addEventListener("click", function () {
+  //  등록 버튼 클릭 시 내용물 초기화
+  const modalEvetId = document.getElementById("modalEvetId");
+  const modalReact = document.getElementById("modalReact");
+  const modalReactNum = document.getElementById("modalReactNum");
+  const modalTableRow = document.getElementById("tableRowId");
+
+  modalEvetId.value = "";
+  modalReact.value = "";
+  modalReactNum.value = "";
+  modalTableRow.value = "";
 });
 
 function saveSuccescc() {
@@ -608,4 +651,15 @@ function addDetail(checkbox) {
   console.log("저장완료");
   alert("상세 대응이 저장 되었습니다");
   getSelectBoxList();
+}
+
+function getCheckedRowIds() {
+  const checkedRows = document.querySelectorAll(
+    'tr input[type="checkbox"]:checked'
+  );
+
+  const checkedRowIds = Array.from(checkedRows).map(
+    (checkbox) => checkbox.closest("tr").id
+  );
+  return checkedRowIds;
 }
