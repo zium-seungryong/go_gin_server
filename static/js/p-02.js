@@ -175,7 +175,6 @@ function listTable(jsonData) {
 
       const innerCheckboxInput = document.createElement("input");
       innerCheckboxInput.type = "checkbox";
-      innerCheckboxInput.id = 1;
       innerCheckboxInput.className = "check-type";
 
       innerCheckboxDiv.appendChild(innerCheckboxInput);
@@ -265,8 +264,8 @@ function tableData() {
 }
 
 function addRow(button) {
-  var tbBoxinArea = button.closest(".tb-boxin-area");
-  var innerTbody = tbBoxinArea.querySelector(".innerTable");
+  const tbBoxinArea = button.closest(".tb-boxin-area");
+  const innerTbody = tbBoxinArea.querySelector(".innerTable");
 
   // 새로운 행(row) 생성
   const newRow = document.createElement("tr");
