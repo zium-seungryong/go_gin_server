@@ -237,6 +237,40 @@ func ReporterInsert(c *gin.Context) {
 	c.JSON(http.StatusOK, reporterHist)
 }
 
+// 체크리스트 대응 내역 기록
+func DeatailHistRInsert(c *gin.Context) {
+	var detailHist models.ReactDetailHist
+
+	// JSON 데이터를 파싱하여 구조체에 바인딩
+	if err := c.BindJSON(&detailHist); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
+		return
+	}
+
+	// 데이터베이스에 대응 내역 저장
+	result := config.DB.Save(&detailHist)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save data"})
+		return
+	}
+
+	c.JSON(http.StatusOK, detailHist)
+}
+
+// 체크리스트 그림용 이벤트 대응 내역
+func IconDetailHist(c *gin.Context) {
+	var reactDetailHist []models.ReactDetailHist
+
+	result := config.DB.Where("detail_check !=  ?", "미시행").Find(&reactDetailHist)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+		return
+	}
+	// JSON으로 결과 값 반환
+	c.JSON(http.StatusOK, &reactDetailHist)
+}
+
 // 이벤트 상황 대응 내역 리스트
 func ReporterHistList(c *gin.Context) {
 	var reporterSearchRslt []ReporterSearchRslt
@@ -247,13 +281,13 @@ func ReporterHistList(c *gin.Context) {
 	pageStr := c.DefaultQuery("page", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
 
-	startDate, err := time.Parse("2006-01-02", startDateStr)
+	startDate, err := time.Parse("2006-01-02 15:04:05", startDateStr)
 	if err != nil {
 		c.JSON(400, gin.H{"error": "Invalid startDate format. Use YYYY-MM-DD."})
 		return
 	}
 
-	endDate, err := time.Parse("2006-01-02", endDateStr)
+	endDate, err := time.Parse("2006-01-02 15:04:05", endDateStr)
 	if err != nil {
 		c.JSON(400, gin.H{"error": "Invalid endDate format. Use YYYY-MM-DD."})
 		return
@@ -523,3 +557,47 @@ func GetDeleteDetailListCheck(c *gin.Context) {
 
 	c.JSON(200, &reactDetail)
 }
+
+// 이벤트 시퀀스로 상황이벤트 내역
+// func GetStatEvetHist(c *gin.Context) {
+// 	var statEvetInfo1 StatEvetInfo1
+// 	evetSeq := c.Query("evetSeq")
+
+// 	result := config.DB.Table("ioc.ioc_stat_evet_outb_hist").
+// 		Select("ioc.ioc_stat_evet_outb_hist.stat_evet_outb_seqn, ioc.ioc_stat_evet_outb_hist.outb_dtm ,ioc.ioc_stat_evet_outb_hist.proc_st, ioc_stat_evet_outb_hist.stat_evet_cntn, isei.stat_evet_nm, erh.report_dtm, erh.reporter_nm").
+// 		Joins("join ioc.ioc_stat_evet_info isei on ioc.ioc_stat_evet_outb_hist.stat_evet_cd = isei.stat_evet_cd and ioc.ioc_stat_evet_outb_hist.svc_theme_cd = isei.svc_theme_cd").
+// 		Joins("left join s_army.evet_reporter_hist erh on ioc.ioc_stat_evet_outb_hist.stat_evet_outb_seqn = erh.evt_seq").
+// 		Order("ioc.ioc_stat_evet_outb_hist.outb_dtm desc").
+// 		Where("ioc_stat_evet_outb_hist.stat_evet_outb_seqn = ?", evetSeq)
+
+// 	if err := result.Find(&statEvetInfo1).Error; err != nil {
+// 		c.JSON(500, gin.H{"error": "Database query error"})
+// 		return
+// 	}
+
+// 	reactDetailHist := []models.ReactDetailHist{}
+
+// 	result2 := config.DB.
+// 		Where("evet_seq = ?", evetSeq).
+// 		Order("detail").
+// 		Order("check_time").
+// 		Find(&reactDetailHist)
+
+// 	if result2.Error != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"db error": result2.Error.Error()})
+// 		return
+// 	}
+
+// 	event := StatEvetInfo2{
+// 		EventSeq:    statEvetInfo1.StatEvetOutbSeqn,
+// 		OutbDtm:     statEvetInfo1.OutbDtm,
+// 		EventNm:     statEvetInfo1.StatEvetNm,
+// 		ProcSt:      statEvetInfo1.ProcSt,
+// 		EventCntn:   statEvetInfo1.StatEvetCntn,
+// 		Reporter:    statEvetInfo1.ReporterNm,
+// 		ReporterDtm: statEvetInfo1.ReportDtm,
+// 		DetailCntns: reactDetailHist,
+// 	}
+
+// 	c.JSON(http.StatusOK, event)
+// }

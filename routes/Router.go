@@ -17,11 +17,13 @@ func ApiRouter(router *gin.Engine) {
 	apiRouter.GET("/reporterHistList", controller.ReporterHistList)
 	apiRouter.GET("/checkListInfo", controller.CheckListInfo)
 	apiRouter.GET("/getStatEvetHist", controller.GetStatEvetHist)
+	apiRouter.GET("/iconDetailHist", controller.IconDetailHist)
 	apiRouter.GET("/getstatEvetReactList", controller.GetstatEvetReactList)
 	apiRouter.GET("/getDeleteDetailListCheck/:svcThemeCd/:statEvetCd/:reactGd", controller.GetDeleteDetailListCheck)
 	apiRouter.POST("/reactInsert", controller.ReactInsert)
 	apiRouter.POST("/detailInsert", controller.DetailInsert)
 	apiRouter.POST("/reporterInsert", controller.ReporterInsert)
+	apiRouter.POST("/detailHistInsert", controller.DeatailHistRInsert)
 	apiRouter.DELETE("/deleteDetail/:id", controller.DeleteDetail)
 	apiRouter.DELETE("/deleteReact/:svcThemeCd/:statEvetCd/:reactGd/:reactGdNum", controller.DeleteReact)
 

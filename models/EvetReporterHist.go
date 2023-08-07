@@ -1,6 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type EvetReporterHist struct {
+	gorm.Model
 	EvetSeq    string `gorm:"column:evt_seq" json:"evetSeq"`         //이벤트 시퀀스
 	StatEvetCd string `gorm:"column:stat_evet_cd" json:"statEvetCd"` //상황이벤트 코드
 	StatEvetNm string `gorm:"column:stat_evet_nm" json:"statEvetNm"` //상황이벤트 명

@@ -120,16 +120,17 @@ function listTable(jsonData) {
 
           if (detailData != 0) {
             for (let v = 0; v < detailData.length; v++) {
-              const row = tbody.insertRow(v);
+              const row = detailBody.insertRow(v);
               const reactGd = row.insertCell(0); //대응단계
               const detail = row.insertCell(1); //상세대응
               const detailCk = row.insertCell(2); //대응여부
               const ckTime = row.insertCell(3); //대응시각
 
-              reactGd.innerHTML = detailData[v].reactGd || "-";
-              detail.innerHTML = detailData[v].detail || "-";
-              detailCk.innerHTML = detailData[v].detailcehck;
-              ckTime.innerHTML = detailData[v].checkTime || "-";
+              reactGd.innerHTML = detailData[v].ReactGd || "-";
+              detail.innerHTML = detailData[v].Detail || "-";
+              detailCk.innerHTML = detailData[v].DetailCheck;
+              ckTime.innerHTML = detailData[v].CheckTime || "-";
+              tbody;
             }
           }
         })
@@ -170,9 +171,11 @@ function tableData(pageNum) {
     pageNum +
     "&pageSize=12&startDate=" +
     startDate +
+    " 00:00:00" +
     "&endDate=" +
     endDate +
-    "&procSt=5" +
+    " 23:59:59" +
+    // "&procSt=5" +
     "&reporterNm=" +
     reporterNm;
 

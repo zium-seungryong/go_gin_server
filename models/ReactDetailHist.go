@@ -1,6 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type ReactDetailHist struct {
+	gorm.Model
 	EvetSeq     string `gorm:"column:evet_seq"`     //이벤트 시퀀스
 	ReactGd     string `gorm:"column:react_gd"`     //대응단계
 	Detail      string `gorm:"column:detail"`       //상세대응

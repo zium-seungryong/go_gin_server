@@ -10,10 +10,54 @@
     <!-- css -->
     <link rel="stylesheet" href="/static/css/basic.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/modal.css" />
   </head>
 
   <body>
     <main class="wrap w100per">
+      <div class="modal-area wh100per fixed zi4">
+        <div class="event-rgdt modal-box-in modal-box fdc abs xy-middle bfff">
+          <div class="top-box flex jcsb">
+            <button class="x-btn img-box abs">
+              <img src="/static/images/ic-close.svg" alt="닫기 아이콘" />
+            </button>
+            <span class="modal-title tb"> 상황조치 완료 </span>
+          </div>
+          <div class="modal-cont-box">
+            <div class="table-wrap">
+              <div class="table-box">
+                <table class="tb-type-modal modal-input-text">
+                  <colgroup>
+                    <col width="30%" />
+                    <col width="*" />
+                  </colgroup>
+                  <tbody>
+                    <tr>
+                      <th>조치자 이름</th>
+                      <td>
+                        <input
+                          type="text"
+                          class="tb-edit"
+                          value=""
+                          class=""
+                          placeholder="이름 입력"
+                          id="modalReporterNm"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-btn-wrap flex jcc">
+            <a class="btn btn-type-1 line-gray mr8 w50per tac">취소</a>
+            <a class="btn btn-type-1 solid-public w50per cfff tac" id="saveBtn"
+              >저장</a
+            >
+          </div>
+        </div>
+      </div>
       <div class="container">
         <section>
           <div class="cnt-wrap flex jcsb w100per">
@@ -37,17 +81,12 @@
                       <li class="event-wd-r">
                         <div class="action-box-r ab-type1 active">
                           <div class="action-box-in">
-                            <div class="tit-text cred tb">침입상황</div>
+                            <div class="tit-text cred tb">상황 이벤트 명</div>
                             <ul>
                               <li class="sub-text flex aic">
                                 <span class="img-box ico-timer"></span>
                                 <span class="set-w-st cgr300">일시</span>
-                                <span class="cfff">소방긴급구조</span>
-                              </li>
-                              <li class="sub-text flex aic">
-                                <span class="img-box ico-location"></span>
-                                <span class="set-w-st cgr300">위치</span>
-                                <span class="cfff">41.40338, 2.17403</span>
+                                <span class="cfff">YYYY-MM-DD</span>
                               </li>
                             </ul>
                           </div>
@@ -65,17 +104,17 @@
                       <li class="event-wd-r">
                         <div class="action-box-r ab-type2 active">
                           <div class="action-box-in">
-                            <div class="tit-text corange tb">침입상황</div>
+                            <div class="tit-text corange tb">대응단계</div>
                             <ul>
                               <li class="sub-text flex aic">
-                                <span class="img-box ico-timer"></span>
-                                <span class="set-w-st cgr300">일시</span>
-                                <span class="cfff">소방긴급구조</span>
+                                <span class="img-box ico-location"></span>
+                                <span class="set-w-st cgr300">상세대응</span>
+                                <span class="cfff">상세 대응 명</span>
                               </li>
                               <li class="sub-text flex aic">
-                                <span class="img-box ico-location"></span>
-                                <span class="set-w-st cgr300">위치</span>
-                                <span class="cfff">41.40338, 2.17403</span>
+                                <span class="img-box ico-timer"></span>
+                                <span class="set-w-st cgr300">조치시간</span>
+                                <span class="cfff">시간</span>
                               </li>
                             </ul>
                           </div>
@@ -93,17 +132,17 @@
                       <li class="event-wd-r">
                         <div class="action-box-r ab-type2 active">
                           <div class="action-box-in">
-                            <div class="tit-text corange tb">침입상황</div>
+                            <div class="tit-text corange tb">대응단계</div>
                             <ul>
                               <li class="sub-text flex aic">
-                                <span class="img-box ico-timer"></span>
-                                <span class="set-w-st cgr300">일시</span>
-                                <span class="cfff">소방긴급구조</span>
+                                <span class="img-box ico-location"></span>
+                                <span class="set-w-st cgr300">상세대응</span>
+                                <span class="cfff">상세 대응 명</span>
                               </li>
                               <li class="sub-text flex aic">
-                                <span class="img-box ico-location"></span>
-                                <span class="set-w-st cgr300">위치</span>
-                                <span class="cfff">41.40338, 2.17403</span>
+                                <span class="img-box ico-timer"></span>
+                                <span class="set-w-st cgr300">조치시간</span>
+                                <span class="cfff">시간</span>
                               </li>
                             </ul>
                           </div>
@@ -121,17 +160,17 @@
                       <li class="event-wd-r">
                         <div class="action-box-r ab-type2 active">
                           <div class="action-box-in">
-                            <div class="tit-text corange tb">침입상황</div>
+                            <div class="tit-text corange tb">대응단계</div>
                             <ul>
                               <li class="sub-text flex aic">
-                                <span class="img-box ico-timer"></span>
-                                <span class="set-w-st cgr300">일시</span>
-                                <span class="cfff">소방긴급구조</span>
+                                <span class="img-box ico-location"></span>
+                                <span class="set-w-st cgr300">상세대응</span>
+                                <span class="cfff">상세 대응 명</span>
                               </li>
                               <li class="sub-text flex aic">
-                                <span class="img-box ico-location"></span>
-                                <span class="set-w-st cgr300">위치</span>
-                                <span class="cfff">41.40338, 2.17403</span>
+                                <span class="img-box ico-timer"></span>
+                                <span class="set-w-st cgr300">조치시간</span>
+                                <span class="cfff">시간</span>
                               </li>
                             </ul>
                           </div>
@@ -177,7 +216,10 @@
                     <span class="layer-stiker str-1">소방재난</span>
                     <span class="layer-title" id="evetTitle">이벤트제목</span>
                   </span>
-                  <button class="btn btn-type-1 solid-gray2">
+                  <button
+                    class="modal-event-rgdt btn btn-type-1 solid-gray2"
+                    id="closeBtn"
+                  >
                     상황조치 완료
                   </button>
                 </div>
