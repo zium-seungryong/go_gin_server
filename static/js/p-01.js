@@ -5,7 +5,7 @@ function listTable(jsonData) {
 
   if (jsonData.length == 0) {
     console.log("json data 없음");
-    return;
+    alert("조회된 데이터가 없습니다");
   }
 
   const arrayData = jsonData;
@@ -119,8 +119,24 @@ function tableData() {
     const month = String(today.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 1을 더함
     const day = String(today.getDate()).padStart(2, "0");
 
-    startDate = "1994-03-08";
-    endDate = year + "-" + month + "-" + day;
+    // 오늘로 부터 일주일 전 데이터 까지
+    const currentDate = new Date();
+
+    // 일주일 전의 날짜 계산
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+    console.log(oneWeekAgo.toISOString().split("T")[0]);
+
+    startDate = oneWeekAgo.toISOString().split("T")[0];
+    startDate = startDate + " 00:00:00";
+    endDate = year + "-" + month + "-" + day + " 23:59:59";
+  } else {
+    startDate = startDate + " 00:00:00";
+    endDate = endDate + " 23:59:59";
+
+    console.log(startDate);
+    console.log(endDate);
   }
 
   if (startDate > endDate) {
@@ -160,11 +176,52 @@ document.getElementById("searchBtn").addEventListener("click", function () {
     alert("시작 시각을 선택하여 주세요");
     return;
   }
-
   tableData(); //1page
 });
 
+// 이벤트 종료 버튼 클릭 시
 document.getElementById("endBtn").addEventListener("click", function () {
   const arrayList = CheckList("all_check", ".check-type");
   console.log(arrayList);
+  if (arrayList.length == 0) {
+    alert("종료할 이벤트를 선택하여 주세요");
+    return;
+  }
+
+  // modal on 종료자 이름
+  $(".modal-area, .event-rgdt").toggleClass("active");
+  $("body").addClass("active");
+});
+
+// 저장 버튼 클릭 시
+document.getElementById("saveBtn").addEventListener("click", function () {
+  const modalReporterNm = document.getElementById("modalReporterNm").value;
+
+  if (modalReporterNm == "") {
+    alert("조치자 이름을 입력하여 주세요");
+    return;
+  }
+  const arrayList = CheckList("all_check", ".check-type");
+  console.log(arrayList);
+
+  const fullDtm = nowDtm();
+
+  const reporterInsertUrl = "http://localhost:8080/api/reporterInsert";
+
+  // 종료 api로 전송 및 저장
+  for (let i = 0; i < arrayList.length; i++) {
+    const evetSeq = arrayList[i];
+
+    const data = {
+      evetSeq: evetSeq,
+      statEvetCd: "",
+      statEvetNm: "이벤트 명",
+      reporterNm: modalReporterNm,
+      reportDtm: fullDtm,
+    };
+    // postApi(reporterInsertUrl, data, statEvetEnd);
+
+    console.log(reporterInsertUrl);
+    console.log(data);
+  }
 });

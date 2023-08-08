@@ -1,11 +1,3 @@
-// $(document).ready(function () {
-//   // 클래스가 "myClass"인 모든 요소를 선택합니다.
-//   $(".ic-down").on("click", function () {
-//     // 현재 클릭된 아코디언 행의 다음 형제(tr.tb-detail)의 tb-boxin-area 클래스를 토글합니다.
-//     $(this).closest("tr").next("tr.tb-detail").find(".tb-boxin-area").toggle();
-//   });
-// });
-
 // 셀렉트 박스 내용 가져오는 api
 function getSelectBoxList() {
   const statEvetInfoListUrl = "http://localhost:8080/api/statEvetInfoList";
@@ -18,6 +10,7 @@ function selectBoxFun(jsonData) {
   // jsonData를 기반으로 option 요소를 생성하여 select 요소에 추가합니다.
   jsonData.forEach(function (item) {
     const optionElement = document.createElement("option");
+    optionElement.style.backgroundColor = "black";
     optionElement.value = item.SvcThemeCd + "-" + item.StatEvetCd; // value에 id를 설정합니다.
     optionElement.textContent = item.StatEvetNm; // 내용을 설정합니다.
     selectElement.appendChild(optionElement); // option을 select에 추가합니다.
@@ -67,6 +60,17 @@ function listTable(jsonData) {
   }
 
   const arrayData = jsonData;
+
+  // 아코디언 메뉴를 여는 함수
+  $(document).ready(function () {
+    $(".ic-down").on("click", function () {
+      $(this)
+        .closest("tr")
+        .next("tr.tb-detail")
+        .find(".tb-boxin-area")
+        .toggle();
+    });
+  });
 
   let v = 0;
   for (let i = 0; i < arrayData.length; i++) {
@@ -227,18 +231,6 @@ function listTable(jsonData) {
     </span>
   </div>`;
     boxArea.appendChild(underDiv);
-
-    $(document).ready(function () {
-      // 클래스가 "myClass"인 모든 요소를 선택합니다.
-      $(".ic-down").on("click", function () {
-        // 현재 클릭된 아코디언 행의 다음 형제(tr.tb-detail)의 tb-boxin-area 클래스를 토글합니다.
-        $(this)
-          .closest("tr")
-          .next("tr.tb-detail")
-          .find(".tb-boxin-area")
-          .toggle();
-      });
-    });
   }
 }
 

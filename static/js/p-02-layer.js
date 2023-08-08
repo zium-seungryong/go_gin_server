@@ -347,7 +347,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
 
   console.log(data);
 
-  const reporterInsertUrl = "http://localhost:8080/api/reporterInsert";
+  const reporterInsertUrl = apiUrl + "reporterInsert";
 
   postApi(reporterInsertUrl, data, statEvetEnd);
 });

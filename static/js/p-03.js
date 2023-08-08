@@ -5,12 +5,12 @@ function listTable(jsonData) {
   const table = document.getElementById("eventTable");
   const tbody = table.getElementsByTagName("tbody")[0];
 
-  if (jsonData.length == 0) {
-    console.log("json data 없음");
-    return;
-  }
-
   const arrayData = jsonData.data;
+
+  if (arrayData.length == 0) {
+    console.log("json data 없음");
+    alert("조회된 데이터가 없습니다");
+  }
 
   tbody.innerHTML = "";
 
@@ -117,7 +117,7 @@ function listTable(jsonData) {
           const detailData = data.detailCntn;
 
           detailBody.innerHTML = "";
-
+          detailBody.className = "tac";
           if (detailData != 0) {
             for (let v = 0; v < detailData.length; v++) {
               const row = detailBody.insertRow(v);
@@ -130,7 +130,6 @@ function listTable(jsonData) {
               detail.innerHTML = detailData[v].Detail || "-";
               detailCk.innerHTML = detailData[v].DetailCheck;
               ckTime.innerHTML = detailData[v].CheckTime || "-";
-              tbody;
             }
           }
         })

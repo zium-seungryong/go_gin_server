@@ -216,8 +216,12 @@ body {
   color: #b8c0ca;
   font-size: 1.3rem;
   font-family: "NexonLv2Gothic-Medium";
-  background: transparent;
+  /* background: transparent; */
+  background-color: #0b0d0f;
   height: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .table-wrap .table-box .tb-type-1 tbody td:first-child {
   border-radius: 4px 0 0 4px;

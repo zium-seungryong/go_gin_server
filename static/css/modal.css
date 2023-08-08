@@ -1,6 +1,6 @@
 /* modal setting */
 .modal-area {
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: none;
   top: 0;
   left: 0;
@@ -29,7 +29,7 @@
 .modal-area .modal-box-in {
   min-width: 400px;
   background: #fff;
-  padding:40px;
+  padding: 40px;
   border-radius: 4px;
   box-sizing: border-box;
 }
@@ -45,7 +45,7 @@
 }
 
 .modal-area .modal-box-in .modal-btn-wrap {
-  margin-top:40px;
+  margin-top: 40px;
 }
 
 /* modal design - 2*/
@@ -55,7 +55,7 @@
   right: 24px;
 }
 .modal-area .modal-box-in-2 .modal-btn-wrap {
-  margin:40px;
+  margin: 40px;
 }
 .modal-area .modal-box-in-2 {
   min-width: 400px;
@@ -64,7 +64,7 @@
   box-sizing: border-box;
 }
 .modal-area .modal-box-in-2 .top-box {
-  padding:20px 0;
+  padding: 20px 0;
   background: #f2f4f8;
   border-radius: 8px 8px 0 0;
 }
@@ -74,27 +74,29 @@
 .modal-area .modal-box-in-2 .cont-box {
   padding: 40px;
   font-size: 1.5rem;
-
 }
-.modal-area .modal-box-in-2 .cont-box.set-modal-w{
+.modal-area .modal-box-in-2 .cont-box.set-modal-w {
   min-width: 600px;
   max-width: 800px;
 }
 
-
 /*modal table */
-.tb-type-modal tr:first-child{
-  border-top:2px solid #3577F8;
-}  
+.tb-type-modal tr:first-child {
+  border-top: 2px solid #3577f8;
+}
 .tb-type-modal tr {
   min-height: 44px;
-  border-bottom:1px solid #eee;
+  border-bottom: 1px solid #eee;
   box-sizing: border-box;
 }
 .tb-type-modal th {
   text-align: center;
   min-width: 160px;
   background: #f2f4f8;
+  position: sticky;
+  top: 0;
+  background-color: #f2f2f2;
+  z-index: 1;
 }
 .tb-type-modal td {
   padding: 4px 16px;
@@ -109,7 +111,7 @@
   border: 1px solid #eee;
   border-radius: 4px;
   box-sizing: border-box;
-  font-size:1.3rem;
+  font-size: 1.3rem;
   white-space: nowrap;
-  padding:12px;
+  padding: 12px;
 }

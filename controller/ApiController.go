@@ -123,13 +123,13 @@ func StatEvetOutbList(c *gin.Context) {
 	endDateStr := c.Query("endDate")
 	evetNmStr := c.Query("evetNm")
 
-	startDate, err := time.Parse("2006-01-02", startDateStr)
+	startDate, err := time.Parse("2006-01-02 15:04:05", startDateStr)
 	if err != nil {
 		c.JSON(400, gin.H{"error": "Invalid startDate format. Use YYYY-MM-DD."})
 		return
 	}
 
-	endDate, err := time.Parse("2006-01-02", endDateStr)
+	endDate, err := time.Parse("2006-01-02 15:04:05", endDateStr)
 	if err != nil {
 		c.JSON(400, gin.H{"error": "Invalid endDate format. Use YYYY-MM-DD."})
 		return
@@ -430,7 +430,8 @@ func GetStatEvetHist(c *gin.Context) {
 	result2 := config.DB.
 		Where("evet_seq = ?", evetSeq).
 		Order("detail").
-		Order("check_time").
+		Order("react_gd").
+		Order("id").
 		Find(&reactDetailHist)
 
 	if result2.Error != nil {
