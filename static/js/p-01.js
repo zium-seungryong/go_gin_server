@@ -69,6 +69,12 @@ function listTable(jsonData) {
     outbDtmCell.classList.add("eventRow");
     procStCell.appendChild(actionSpan);
     procStCell.classList.add("eventRow");
+
+    if (arrayData[i].StatEvetGdCd > 89) {
+      row.style.backgroundColor = "rgba(217, 50, 78, 0.60)"; //90 이상은 빨강
+    } else if (arrayData[i].StatEvetGdCd > 59) {
+      row.style.backgroundColor = "rgba(29, 122, 0, 0.60)"; //60 이상은 주황
+    }
   }
   //   페이지
 
@@ -219,9 +225,9 @@ document.getElementById("saveBtn").addEventListener("click", function () {
       reporterNm: modalReporterNm,
       reportDtm: fullDtm,
     };
-    // postApi(reporterInsertUrl, data, statEvetEnd);
 
     console.log(reporterInsertUrl);
     console.log(data);
+    // postApi(reporterInsertUrl, data, statEvetEnd);
   }
 });

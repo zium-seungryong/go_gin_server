@@ -82,7 +82,7 @@
 
 /*modal table */
 .tb-type-modal tr:first-child {
-  border-top: 2px solid #3577f8;
+  /* border-top: 2px solid #3577f8; */
 }
 .tb-type-modal tr {
   min-height: 44px;

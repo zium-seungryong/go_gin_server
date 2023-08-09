@@ -49,6 +49,7 @@ type StatEvetInfo2 struct {
 
 type StatEvetOutbHistList struct {
 	StatEvetOutbSeqn string
+	StatEvetGdCd     string
 	OutbDtm          string
 	StatEvetNm       string
 	StatEvetCntn     string
@@ -138,7 +139,7 @@ func StatEvetOutbList(c *gin.Context) {
 	var procSt = "5" // 상황 발생 1, 상황 진행중 3, 상황 종료 5
 
 	result := config.DB.Table("ioc.ioc_stat_evet_outb_hist").
-		Select("ioc.ioc_stat_evet_outb_hist.stat_evet_outb_seqn, ioc.ioc_stat_evet_outb_hist.outb_dtm ,ioc.ioc_stat_evet_outb_hist.proc_st, ioc_stat_evet_outb_hist.stat_evet_cntn, isei.stat_evet_nm").
+		Select("ioc.ioc_stat_evet_outb_hist.stat_evet_outb_seqn, ioc.ioc_stat_evet_outb_hist.stat_evet_gd_cd, ioc.ioc_stat_evet_outb_hist.outb_dtm ,ioc.ioc_stat_evet_outb_hist.proc_st, ioc_stat_evet_outb_hist.stat_evet_cntn, isei.stat_evet_nm").
 		Joins("join ioc.ioc_stat_evet_info isei on ioc.ioc_stat_evet_outb_hist.stat_evet_cd = isei.stat_evet_cd and ioc.ioc_stat_evet_outb_hist.svc_theme_cd = isei.svc_theme_cd").
 		Order("ioc.ioc_stat_evet_outb_hist.outb_dtm desc").
 		Where("outb_dtm BETWEEN ? AND ?", startDate, endDate).
@@ -260,8 +261,10 @@ func DeatailHistRInsert(c *gin.Context) {
 // 체크리스트 그림용 이벤트 대응 내역
 func IconDetailHist(c *gin.Context) {
 	var reactDetailHist []models.ReactDetailHist
+	evetSeq := c.Query("evetSeq")
 
-	result := config.DB.Where("detail_check !=  ?", "미시행").Find(&reactDetailHist)
+	result := config.DB.Where("detail_check !=  ?", "미시행").
+		Where("evet_seq =  ?", evetSeq).Find(&reactDetailHist)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})

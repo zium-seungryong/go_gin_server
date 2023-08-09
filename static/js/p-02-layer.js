@@ -238,7 +238,8 @@ function btnClick(btnCell) {
 }
 
 function reactIconList() {
-  const reactIconListUrl = "http://localhost:8080/api/iconDetailHist";
+  const reactIconListUrl =
+    "http://localhost:8080/api/iconDetailHist?evetSeq=" + evetSeq;
 
   getApi(reactIconListUrl, iconCreate);
 }
@@ -357,8 +358,6 @@ function statEvetEnd(jsonData) {
   console.log(jsonData);
   alert("상황 이벤트가 종료되었습니다.");
   // 모달 종료 or 창 종료
-  $(".modal-area .modal-box .x-btn").click(function () {
-    $(".modal-area, .modal-box").removeClass("active");
-    $("body").removeClass("active");
-  });
+  $(".modal-area, .modal-box").removeClass("active");
+  $("body").removeClass("active");
 }
