@@ -102,7 +102,7 @@ function listTable(jsonData) {
 
       // 새 창을 엽니다.
       window.open(
-        "http://localhost:8080/page/checkList?evetSeq=" + rowEvetSeq,
+        pageUrl + "checkList?evetSeq=" + rowEvetSeq,
         "_blank",
         windowFeatures
       );
@@ -151,7 +151,8 @@ function tableData() {
   }
 
   listUrl =
-    "http://localhost:8080/api/statEvetOutbList?" +
+    apiUrl +
+    "statEvetOutbList?" +
     "startDate=" +
     startDate +
     "&endDate=" +
@@ -212,7 +213,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
 
   const fullDtm = nowDtm();
 
-  const reporterInsertUrl = "http://localhost:8080/api/reporterInsert";
+  const reporterInsertUrl = apiUrl + "reporterInsert";
 
   // 종료 api로 전송 및 저장
   for (let i = 0; i < arrayList.length; i++) {

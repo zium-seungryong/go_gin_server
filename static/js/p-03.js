@@ -78,8 +78,7 @@ function listTable(jsonData) {
       modalArea.classList.toggle("active");
       eventRgdt.classList.toggle("active");
       body.classList.add("active");
-      const url =
-        "http://localhost:8080/api/getStatEvetHist?evetSeq=" + clickedRowId;
+      const url = apiUrl + "getStatEvetHist?evetSeq=" + clickedRowId;
 
       fetch(url, {
         method: "GET",
@@ -165,7 +164,8 @@ function tableData(pageNum) {
   }
 
   listUrl =
-    "http://localhost:8080/api/reporterHistList?" +
+    apiUrl +
+    "reporterHistList?" +
     "page=" +
     pageNum +
     "&pageSize=12&startDate=" +

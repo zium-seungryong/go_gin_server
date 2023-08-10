@@ -5,8 +5,7 @@ console.log(evetSeq);
 // 파라미터에서 이벤트 시퀀스를 가져오면 실행
 if (evetSeq != null) {
   // 이벤트 제목 및 발생 시각 가져오기
-  const evetUrl =
-    "http://localhost:8080/api/getStatEvetHist?evetSeq=" + evetSeq;
+  const evetUrl = apiUrl + "getStatEvetHist?evetSeq=" + evetSeq;
 
   getApi(evetUrl, evetInfo);
 
@@ -62,8 +61,7 @@ if (evetSeq != null) {
 
   //체크리스트 내용채우기
 
-  const reactListUrl =
-    "http://localhost:8080/api/checkListInfo?evetSeq=" + evetSeq;
+  const reactListUrl = apiUrl + "checkListInfo?evetSeq=" + evetSeq;
 
   getApi(reactListUrl, tabList);
 
@@ -208,7 +206,7 @@ function btnClick(btnCell) {
 
   console.log(data);
 
-  const detailHistInsertUrl = "http://localhost:8080/api/detailHistInsert";
+  const detailHistInsertUrl = apiUrl + "detailHistInsert";
 
   fetch(detailHistInsertUrl, {
     method: "POST",
@@ -238,8 +236,7 @@ function btnClick(btnCell) {
 }
 
 function reactIconList() {
-  const reactIconListUrl =
-    "http://localhost:8080/api/iconDetailHist?evetSeq=" + evetSeq;
+  const reactIconListUrl = apiUrl + "iconDetailHist?evetSeq=" + evetSeq;
 
   getApi(reactIconListUrl, iconCreate);
 }

@@ -92,6 +92,7 @@
 .tb-type-modal th {
   text-align: center;
   min-width: 160px;
+  height: 30px;
   background: #f2f4f8;
   position: sticky;
   top: 0;

@@ -91,30 +91,32 @@ type StatEvetOutbHistList struct {
 // }
 
 type OriginformedData struct {
-	ID         uint
-	SiteCd     string
-	ClientCd   string
-	ZnCd       string
-	UnitSvcCd  string
-	SvcThemeCd string
-	StatEvetCd string
-	StatEvetNm string
-	ReactGd    string
-	ReactGdNum int
+	ID           uint
+	SiteCd       string
+	ClientCd     string
+	ZnCd         string
+	UnitSvcCd    string
+	SvcThemeCd   string
+	StatEvetCd   string
+	StatEvetNm   string
+	ReactGd      string
+	ReactGdNum   int
+	ReactGdColor string
 }
 
 type TransformedData struct {
-	ID         uint
-	SiteCd     string               `json:"SiteCd"`
-	ClientCd   string               `json:"ClientCd"`
-	ZnCd       string               `json:"ZnCd"`
-	UnitSvcCd  string               `json:"UnitSvcCd"`
-	SvcThemeCd string               `json:"svcThemeCd"`
-	StatEvetCd string               `json:"statEvetCd"`
-	StatEvetNm string               `json:"statEvetNm"`
-	ReactGd    string               `json:"reactGd"`
-	ReactGdNum int                  `json:"reactGdNum"`
-	DetailList []models.ReactDetail `json:"detailList"`
+	ID           uint
+	SiteCd       string               `json:"SiteCd"`
+	ClientCd     string               `json:"ClientCd"`
+	ZnCd         string               `json:"ZnCd"`
+	UnitSvcCd    string               `json:"UnitSvcCd"`
+	SvcThemeCd   string               `json:"svcThemeCd"`
+	StatEvetCd   string               `json:"statEvetCd"`
+	StatEvetNm   string               `json:"statEvetNm"`
+	ReactGd      string               `json:"reactGd"`
+	ReactGdNum   int                  `json:"reactGdNum"`
+	DetailList   []models.ReactDetail `json:"detailList"`
+	ReactGdColor string               `json:"reactGdColor"`
 }
 
 // 현재 발생 중인 상황 이벤트
@@ -462,7 +464,7 @@ func GetstatEvetReactList(c *gin.Context) {
 	statEvetCdStr := c.Query("statEvetCd")
 
 	result := config.DB.Table("s_army.evet_react").
-		Select("isei.site_cd, isei.client_cd, isei.zn_cd,isei.unit_svc_cd, s_army.evet_react.svc_theme_cd, s_army.evet_react.stat_evet_cd, isei.stat_evet_nm, s_army.evet_react.react_gd, s_army.evet_react.react_gd_num, s_army.evet_react.id ").
+		Select("isei.site_cd, isei.client_cd, isei.zn_cd,isei.unit_svc_cd, s_army.evet_react.svc_theme_cd, s_army.evet_react.stat_evet_cd, isei.stat_evet_nm, s_army.evet_react.react_gd, s_army.evet_react.react_gd_num, s_army.evet_react.id, s_army.evet_react.react_gd_color ").
 		Joins("join ioc.ioc_stat_evet_info isei on s_army.evet_react.svc_theme_cd = isei.svc_theme_cd and s_army.evet_react.stat_evet_cd = isei.stat_evet_cd").
 		Order("isei.stat_evet_nm, isei.stat_evet_cd, s_army.evet_react.react_gd_num").
 		Where("s_army.evet_react.deleted_at is NULL").
@@ -494,17 +496,18 @@ func GetstatEvetReactList(c *gin.Context) {
 		}
 
 		transformedData := TransformedData{
-			ID:         oriData[i].ID,
-			SiteCd:     oriData[i].SiteCd,
-			ClientCd:   oriData[i].ClientCd,
-			ZnCd:       oriData[i].ZnCd,
-			UnitSvcCd:  oriData[i].UnitSvcCd,
-			SvcThemeCd: oriData[i].SvcThemeCd,
-			StatEvetCd: oriData[i].StatEvetCd,
-			StatEvetNm: oriData[i].StatEvetNm,
-			ReactGd:    oriData[i].ReactGd,
-			ReactGdNum: oriData[i].ReactGdNum,
-			DetailList: reactDetail,
+			ID:           oriData[i].ID,
+			SiteCd:       oriData[i].SiteCd,
+			ClientCd:     oriData[i].ClientCd,
+			ZnCd:         oriData[i].ZnCd,
+			UnitSvcCd:    oriData[i].UnitSvcCd,
+			SvcThemeCd:   oriData[i].SvcThemeCd,
+			StatEvetCd:   oriData[i].StatEvetCd,
+			StatEvetNm:   oriData[i].StatEvetNm,
+			ReactGd:      oriData[i].ReactGd,
+			ReactGdNum:   oriData[i].ReactGdNum,
+			ReactGdColor: oriData[i].ReactGdColor,
+			DetailList:   reactDetail,
 		}
 		event = append(event, transformedData)
 	}

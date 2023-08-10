@@ -1,6 +1,6 @@
 // 셀렉트 박스 내용 가져오는 api
 function getSelectBoxList() {
-  const statEvetInfoListUrl = "http://localhost:8080/api/statEvetInfoList";
+  const statEvetInfoListUrl = apiUrl + "statEvetInfoList";
 
   getApi(statEvetInfoListUrl, selectBoxFun);
 }
@@ -82,7 +82,10 @@ function listTable(jsonData) {
     const statEvetNmCell = row.insertCell(2); //상황 이벤트 명
     const reactGdCell = row.insertCell(3); //대응 단계 명
     const reactGdNumCell = row.insertCell(4); //대응 표시 순서
-    const iconCell = row.insertCell(5); //상세
+    const reactGdColorCell = row.insertCell(5); //표시 색상
+    const iconCell = row.insertCell(6); //상세
+    reactGdColorCell.style.backgroundColor = arrayData[i].reactGdColor;
+    reactGdColorCell.style.color = arrayData[i].reactGdColor;
 
     const evetId =
       arrayData[i].ClientCd +
@@ -109,6 +112,7 @@ function listTable(jsonData) {
     statEvetNmCell.innerHTML = arrayData[i].statEvetNm || "-";
     reactGdCell.innerHTML = arrayData[i].reactGd || "-";
     reactGdNumCell.innerHTML = arrayData[i].reactGdNum || "-";
+    reactGdColorCell.innerHTML = arrayData[i].reactGdColor;
     iconCell.innerHTML = `<span class="ic-down"></span>`;
 
     const statArray = arrayData[i].detailList;
@@ -244,7 +248,8 @@ function tableData() {
   const secondPart = separatedArray[1]; // "15"
 
   listUrl =
-    "http://localhost:8080/api/getstatEvetReactList?svcThemeCd=" +
+    apiUrl +
+    "getstatEvetReactList?svcThemeCd=" +
     firstPart +
     "&statEvetCd=" +
     secondPart;
@@ -333,8 +338,7 @@ function delRow(button) {
 
   for (let i = 0; i < rowsToDelete.length; i++) {
     if (checkIdList[i] != null || checkIdList[i] != "") {
-      const deleteUrl =
-        "http://localhost:8080/api/deleteDetail/" + checkIdList[i];
+      const deleteUrl = apiUrl + "deleteDetail/" + checkIdList[i];
       console.log(deleteUrl);
       deleteDelete(deleteUrl);
     }
@@ -359,11 +363,19 @@ document.getElementById("saveBtn").addEventListener("click", function () {
   const modalReact = document.getElementById("modalReact");
   const modalReactNum = document.getElementById("modalReactNum");
   const modalTableRow = document.getElementById("tableRowId");
+  const colorPicker = document.getElementById("modalReactColor");
 
   const modalEvetIdVal = modalEvetId.value;
   const modalReactVal = modalReact.value;
   const modalReactNumVal = modalReactNum.value;
   const modalTableRowVal = modalTableRow.value;
+
+  // 색 가져오기
+  // 대응 단계 table에 대응단계 표시 색 추가
+  // 대응 단계 색을 읽어와서 체크리스트에서 탭을 맞는 색으로 변경
+  // 색으로 그림과 대응단ㄱㅖ 구분하기
+  console.log(colorPicker);
+  console.log(colorPicker.value);
 
   if (modalEvetIdVal == null || modalEvetIdVal == "") {
     alert("이벤트 아이디를  입력하여 주세요");
@@ -385,7 +397,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
     return;
   }
 
-  saveUrl = "http://localhost:8080/api/reactInsert";
+  saveUrl = apiUrl + "reactInsert";
 
   // evet id SMT-PA3-000DIE001E31
   const svcThemeCd = modalEvetIdVal.substring(11, 14); //DIE
@@ -408,6 +420,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
       statEvetCd: statEvetCd.toString(),
       reactGd: modalReactVal,
       reactGdNum: Number(modalReactNumVal),
+      reactGdColor: colorPicker.value,
     };
   } else {
     data = {
@@ -416,6 +429,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
       statEvetCd: statEvetCd.toString(),
       reactGd: modalReactVal,
       reactGdNum: Number(modalReactNumVal),
+      reactGdColor: colorPicker.value,
     };
   }
 
@@ -426,6 +440,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
   modalReact.value = "";
   modalReactNum.value = "";
   modalTableRow.value = "";
+  colorPicker.value = "";
 
   postApi(saveUrl, data, saveSuccescc);
   // 모달 닫기
@@ -464,7 +479,8 @@ document.getElementById("deleteBtn").addEventListener("click", function () {
       const reactGdNum = tdValues[3];
 
       const deleteUrl =
-        "http://localhost:8080/api/deleteReact/" +
+        apiUrl +
+        "deleteReact/" +
         svcThemeCd +
         "/" +
         statEvetCd +
@@ -474,7 +490,8 @@ document.getElementById("deleteBtn").addEventListener("click", function () {
         reactGdNum;
 
       const checkUrl =
-        "http://localhost:8080/api/getDeleteDetailListCheck/" +
+        apiUrl +
+        "getDeleteDetailListCheck/" +
         svcThemeCd +
         "/" +
         statEvetCd +
@@ -538,17 +555,19 @@ document.getElementById("updateBtn").addEventListener("click", function () {
       });
     }
   });
-  if (otherTdValues.length > 5) {
+  if (otherTdValues.length > 6) {
     alert("수정은 한건만 진행할 수 있습니다");
     return;
   } else {
     const modalEvetId = document.getElementById("modalEvetId");
     const modalReact = document.getElementById("modalReact");
     const modalReactNum = document.getElementById("modalReactNum");
+    const modalReactColor = document.getElementById("modalReactColor");
 
     modalEvetId.value = otherTdValues[0] || "-";
     modalReact.value = otherTdValues[2] || "-";
     modalReactNum.value = otherTdValues[3] || "-";
+    modalReactColor.value = otherTdValues[4] || "";
     modalEvetId.readOnly = true;
 
     const modalTable = document.getElementById("tableRowId");
@@ -633,7 +652,7 @@ function addDetail(checkbox) {
       console.log("id ㅇ");
     }
 
-    const postUrl = "http://localhost:8080/api/detailInsert";
+    const postUrl = apiUrl + "detailInsert";
     console.log(data);
     postApi3(postUrl, data);
   }
