@@ -552,7 +552,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .tab-menu-box li a.active {
   color: #fff;
-  background: #3577f8;
+  /* background: #3577f8; */
 }
 .tab-menu-box li a:hover {
   color: #fff;
@@ -600,7 +600,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 20px 20px 12px 20px;
   border: 1px solid #e57a00;
   border-radius: 8px;
-  background: rgba(229, 122, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   margin-left: 24px;
 }
 
@@ -617,6 +617,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .event-progress-area .event-order-box li.circle.c-type2 {
   background: #e57a00;
+  position: relative;
 }
 .event-progress-area .event-order-box li.circle.c-type3 {
   background: #00b69b;
@@ -638,7 +639,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: 1;
   background: url(/static/images/event-arrow1.svg) no-repeat;
 }
-.event-progress-area .event-order-box li.circle.c-type2 span::after {
+/* .event-progress-area .event-order-box li.circle.c-type2 span::after {
   content: "";
   display: block;
   width: 16px;
@@ -647,8 +648,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   top: 0%;
   left: calc(50% - 6px);
   transform: translateY(50%);
-  z-index: 1;
+  z-index: -1;
   background: url(/static/images/event-arrow2.svg) no-repeat;
+} */
+
+.event-progress-area .event-order-box li.circle.c-type2 span::after {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 80px;
+  position: absolute;
+  top: 78%;
+  left: calc(50% - 6px);
+  transform: translateY(50%);
+  z-index: -1;
+  background: url(/static/images/event-arrow3.svg) no-repeat;
 }
 
 .event-order-box .action-box-r {

@@ -56,40 +56,6 @@ type StatEvetOutbHistList struct {
 	ProcSt           string
 }
 
-// type OriginformedData struct {
-// 	SiteCd     string
-// 	ClientCd   string
-// 	ZnCd       string
-// 	UnitSvcCd  string
-// 	SvcThemeCd string
-// 	StatEvetCd string
-// 	StatEvetNm string
-// 	ReactGd    string
-// 	ReactGdNum int
-// 	Detail     string
-// 	DetailNum  int
-// }
-
-// // Detail 구조체 정의
-// type Detail struct {
-// 	Detail    string `json:"detail"`
-// 	DetailNum int    `json:"detailNum"`
-// }
-
-// // TransformedData 구조체, DetailList를 Detail 객체 슬라이스로 변경
-// type TransformedData struct {
-// 	SiteCd     string   `json:"SiteCd"`
-// 	ClientCd   string   `json:"ClientCd"`
-// 	ZnCd       string   `json:"ZnCd"`
-// 	UnitSvcCd  string   `json:"UnitSvcCd"`
-// 	SvcThemeCd string   `json:"svcThemeCd"`
-// 	StatEvetCd string   `json:"statEvetCd"`
-// 	StatEvetNm string   `json:"statEvetNm"`
-// 	ReactGd    string   `json:"reactGd"`
-// 	ReactGdNum int      `json:"reactGdNum"`
-// 	DetailList []Detail `json:"detailList"`
-// }
-
 type OriginformedData struct {
 	ID           uint
 	SiteCd       string
@@ -117,6 +83,15 @@ type TransformedData struct {
 	ReactGdNum   int                  `json:"reactGdNum"`
 	DetailList   []models.ReactDetail `json:"detailList"`
 	ReactGdColor string               `json:"reactGdColor"`
+}
+
+type IconData struct {
+	EvetSeq string	
+	Detail string
+	CheckTime string
+	DetailCheck string
+	ReactGd string
+	ReactGdColor string
 }
 
 // 현재 발생 중인 상황 이벤트
@@ -261,12 +236,33 @@ func DeatailHistRInsert(c *gin.Context) {
 }
 
 // 체크리스트 그림용 이벤트 대응 내역
+// func IconDetailHist(c *gin.Context) {
+// 	var reactDetailHist []IconData
+// 	evetSeq := c.Query("evetSeq")
+
+// 	result := config.DB.Joins().
+// 		Where("detail_check !=  ?", "미시행").
+// 		Where("evet_seq =  ?", evetSeq).Find(&reactDetailHist)
+
+// 	if result.Error != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
+// 		return
+// 	}
+// 	// JSON으로 결과 값 반환
+// 	c.JSON(http.StatusOK, &reactDetailHist)
+// }
+
 func IconDetailHist(c *gin.Context) {
-	var reactDetailHist []models.ReactDetailHist
+	var reactDetailHist []IconData
 	evetSeq := c.Query("evetSeq")
 
-	result := config.DB.Where("detail_check !=  ?", "미시행").
-		Where("evet_seq =  ?", evetSeq).Find(&reactDetailHist)
+	result := config.DB.Table("s_army.react_detail_hist").
+		Select("s_army.react_detail_hist.evet_seq, s_army.react_detail_hist.detail, s_army.react_detail_hist.react_gd,s_army.react_detail_hist.check_time, s_army.react_detail_hist.detail_check, s_army.evet_react.react_gd_color").
+		Joins("left join s_army.evet_react on s_army.react_detail_hist.react_gd = s_army.evet_react.react_gd").
+		Where("s_army.react_detail_hist.detail_check != ?", "미시행").
+		Where("s_army.react_detail_hist.evet_seq =  ?", evetSeq).
+		Order("s_army.react_detail_hist.check_time").
+		Find(&reactDetailHist)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"db error": result.Error.Error()})
@@ -404,6 +400,7 @@ func CheckListInfo(c *gin.Context) {
 			StatEvetNm: evetReact[i].StatEvetNm,
 			ReactGd:    evetReact[i].ReactGd,
 			ReactGdNum: evetReact[i].ReactGdNum,
+			ReactGdColor: evetReact[i].ReactGdColor ,
 			DetailList: reactDetail,
 		}
 		event = append(event, transformedData)

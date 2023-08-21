@@ -84,7 +84,7 @@ function listTable(jsonData) {
     const reactGdNumCell = row.insertCell(4); //대응 표시 순서
     const reactGdColorCell = row.insertCell(5); //표시 색상
     const iconCell = row.insertCell(6); //상세
-    reactGdColorCell.style.backgroundColor = arrayData[i].reactGdColor;
+    // reactGdColorCell.style.backgroundColor = arrayData[i].reactGdColor;
     reactGdColorCell.style.color = arrayData[i].reactGdColor;
 
     const evetId =

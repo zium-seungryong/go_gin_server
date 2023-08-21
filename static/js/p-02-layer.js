@@ -25,7 +25,7 @@ if (evetSeq != null) {
     <div class="action-box-r none"></div>
     </li>
     <li class="circle c-type1">
-    <span class="f16 y-middle">1</span>
+    <span class="f16 y-middle cwhite">1</span>
     </li>
     `;
     const fristLiArea = document.createElement("li");
@@ -78,10 +78,15 @@ if (evetSeq != null) {
     }
     for (let i = 0; i < jsonData.length; i++) {
       // 탭 생성
+      const tabColor = jsonData[i].reactGdColor;
       const liArea = document.createElement("li");
       const aArea = document.createElement("a");
       aArea.href = "#tab" + jsonData[i].reactGdNum + "-1";
       aArea.innerHTML = jsonData[i].reactGd;
+
+      if (tabColor != null && tabColor != "") {
+        aArea.style.backgroundColor = tabColor;
+      }
       liArea.appendChild(aArea);
       tabArea.appendChild(liArea);
       // 테이블 영역 생성
@@ -111,8 +116,10 @@ if (evetSeq != null) {
       const detailArray = jsonData[i].detailList;
 
       for (let v = 0; v < detailArray.length; v++) {
+        console.log(detailArray);
         const newRow = tbodyArea.insertRow(v);
         newRow.className = "detailRow";
+        newRow.id = detailArray[v].ID;
         // 새로운 행에 셀 추가
         const detailCell = newRow.insertCell(0); //상세 대응
         const detailDtnCell = newRow.insertCell(1); //대응 시각
@@ -177,6 +184,7 @@ function btnClick(btnCell) {
   const tabArea = document.getElementById("tabArea");
   const reactGd = tabArea.querySelector(".active").textContent;
 
+  console.log(clickTbRow.id);
   console.log(detailDtmTd);
 
   // 대응시각 구하기
@@ -270,8 +278,11 @@ function iconCreate(jsonData) {
     // 왼쪽 동그라미 생성 및 추가
     const innerCircleArea = document.createElement("li");
     innerCircleArea.className = "circle c-type2";
+    if (jsonData[i].ReactGdColor != "" && jsonData[i].ReactGdColor != null) {
+      innerCircleArea.style.backgroundColor = jsonData[i].ReactGdColor;
+    }
     const innerCircleIndexArea = document.createElement("span");
-    innerCircleIndexArea.className = "f16 y-middle";
+    innerCircleIndexArea.className = "f16 y-middle cwhite";
     innerCircleIndexArea.innerHTML = i + 2; //i영역 계속 추가
 
     innerCircleArea.appendChild(innerCircleIndexArea);
@@ -282,10 +293,20 @@ function iconCreate(jsonData) {
     innerLiArea.className = "event-wd-r";
     const boxDivArea = document.createElement("div");
     boxDivArea.className = "action-box-r ab-type2 active";
+
+    if (jsonData[i].ReactGdColor != "" && jsonData[i].ReactGdColor != null) {
+      boxDivArea.style.border = "1px solid " + jsonData[i].ReactGdColor;
+    }
+
     const boxInnerArea = document.createElement("div");
+
     boxInnerArea.className = "action-box-in";
     const boxTitleArea = document.createElement("div");
-    boxTitleArea.className = "tit-text corange tb";
+    boxTitleArea.className = "tit-text tb";
+    boxTitleArea.style.color = "#FFF";
+    if (jsonData[i].ReactGdColor != "" && jsonData[i].ReactGdColor != null) {
+      boxTitleArea.style.color = jsonData[i].ReactGdColor;
+    }
     boxTitleArea.innerHTML = jsonData[i].ReactGd || "-";
     const boxUlArea = document.createElement("ul");
     // 상세대응
